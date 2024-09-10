@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Transactional
@@ -98,7 +99,21 @@ public class InvitacionService implements IInvitacionService {
 
     }
 
-    //TODO HACER UN GET MIS INVITACIONES
+    public Set<InvitacionResponse> getInvitaciones(String email) {
+
+        Set<InvitacionResponse> invitacionesToResponse = new HashSet<>();
+
+        invitacionRepository.findByEmail(email).forEach(invitacion -> {
+
+            invitacionesToResponse.add(entityToResponse(invitacion));
+
+        });
+
+
+        return invitacionesToResponse;
+
+
+    }
 
 
     @Override

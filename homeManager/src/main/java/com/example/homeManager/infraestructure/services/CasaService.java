@@ -100,7 +100,13 @@ public class CasaService implements ICasaService {
     }
 
     @Override
-    public void delete(String s) {
+    public void delete(String id) {
+
+        tareasRepository.deleteAll(tareasRepository.findTareasCasa(id));
+        log.info("Tareas de la casa {} han sido borradas correctamente.", id);
+
+        casaRepository.deleteById(id);
+        log.info("Casa {} ha sido borrado correctamente.", id);
 
     }
 

@@ -5,10 +5,12 @@ import com.example.homeManager.api.models.responses.MiembroResponse;
 import com.example.homeManager.api.models.responses.TareaResponse;
 import com.example.homeManager.domain.documents.TareaDocument;
 import com.example.homeManager.domain.documents.UserDocument;
+import com.example.homeManager.domain.repositories.CasaRepository;
 import com.example.homeManager.domain.repositories.TareaRepository;
 import com.example.homeManager.domain.repositories.UserRepository;
 import com.example.homeManager.infraestructure.abstract_services.ITareaService;
 import com.example.homeManager.utils.EstadoTarea;
+import com.example.homeManager.utils.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +26,7 @@ import java.time.LocalDateTime;
 public class TareaService implements ITareaService {
 
     private final TareaRepository tareasRepository;
+    private final CasaRepository casaRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -44,7 +47,11 @@ public class TareaService implements ITareaService {
 
         var tareaPersisted = tareasRepository.save(tareaToPersist);
 
-        log.info("Tarea {} creada correctamente", tareaPersisted.getNombre());
+        var casa = casaRepository.findById(request.getIdCasa()).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+        casa.getIdTareas().add(tareaPersisted.getId());
+        casaRepository.save(casa);
+
+        log.info("Tarea {} creada correctamente y agregada a la casa {}.", tareaPersisted.getNombre(), tareaPersisted.getIdCasa());
 
         return entityToResponse(tareaPersisted);
     }

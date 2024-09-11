@@ -9,6 +9,7 @@ import com.example.homeManager.domain.repositories.UserRepository;
 import com.example.homeManager.infraestructure.abstract_services.IInvitacionService;
 import com.example.homeManager.utils.EstadoInvitacion;
 import com.example.homeManager.utils.InvitacionVigente;
+import com.example.homeManager.utils.exceptions.InvitacionFinalizadaException;
 import com.example.homeManager.utils.exceptions.UserAlreadyAddedInCasa;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,8 +93,8 @@ public class InvitacionService implements IInvitacionService {
             invitacionRepository.save(invitacionToUpdate);
 
         } else {
-
-
+            log.info("La invitación tiene estado FINALIZADO y no se puede modificar.");
+            throw new InvitacionFinalizadaException("La invitación ya ha sido usada y no se puede modificar.");
         }
         return entityToResponse(invitacionToUpdate);
 
@@ -103,12 +104,9 @@ public class InvitacionService implements IInvitacionService {
 
         Set<InvitacionResponse> invitacionesToResponse = new HashSet<>();
 
-        invitacionRepository.findByEmail(email).forEach(invitacion -> {
-
-            invitacionesToResponse.add(entityToResponse(invitacion));
-
-        });
-
+        invitacionRepository
+                .findByEmail(email)
+                .forEach(invitacion -> invitacionesToResponse.add(entityToResponse(invitacion)));
 
         return invitacionesToResponse;
 

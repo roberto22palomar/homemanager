@@ -30,6 +30,12 @@ public class CasaController {
         return ResponseEntity.ok(casaService.getTareasCasa(id));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CasaResponse> getCasa(@PathVariable String id) {
+
+        return ResponseEntity.ok(casaService.read(id));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCasa(
             @PathVariable String id) {

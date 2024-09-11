@@ -73,14 +73,12 @@ public class CasaService implements ICasaService {
 
     public Set<TareaResponse> getTareasCasa(String id) {
 
-        var casa = casaRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Casa no encontrada con ese ID."));
+        var casa = casaRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
 
         List<TareaDocument> tareas = tareasRepository.findAllById(casa.getIdTareas());
         Set<TareaResponse> tareasResponse = new HashSet<>();
 
-        tareas.forEach(tarea -> {
-            tareasResponse.add(entityTareaToResponse(tarea));
-        });
+        tareas.forEach(tarea -> tareasResponse.add(entityTareaToResponse(tarea)));
 
         log.info("Consulta de las tareas de la casa con id: {}", id);
 
@@ -89,11 +87,12 @@ public class CasaService implements ICasaService {
 
     }
 
-    ;
-
     @Override
-    public CasaResponse read(String s) {
-        return null;
+    public CasaResponse read(String id) {
+
+        var casa = casaRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+
+        return entityToResponse(casa);
     }
 
     @Override

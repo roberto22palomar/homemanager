@@ -1,12 +1,12 @@
-package com.example.homeManager.api.controllers.error_handler;
+package com.example.homemanager.api.controllers.error_handler;
 
 
 
-import com.example.homeManager.api.models.responses.error.BaseErrorResponse;
-import com.example.homeManager.api.models.responses.error.ErrorResponse;
-import com.example.homeManager.utils.exceptions.IdNotFoundException;
-import com.example.homeManager.utils.exceptions.InvitacionFinalizadaException;
-import com.example.homeManager.utils.exceptions.UserAlreadyAddedInCasa;
+import com.example.homemanager.api.models.responses.error.BaseErrorResponse;
+import com.example.homemanager.api.models.responses.error.ErrorResponse;
+import com.example.homemanager.utils.exceptions.IdNotFoundException;
+import com.example.homemanager.utils.exceptions.InvitacionFinalizadaException;
+import com.example.homemanager.utils.exceptions.UserAlreadyAddedInCasa;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

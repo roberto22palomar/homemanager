@@ -1,8 +1,8 @@
-package com.example.homeManager.infraestructure.abstract_services;
+package com.example.homemanager.infraestructure.abstract_services;
 
-import com.example.homeManager.api.models.request.InvitacionRequest;
-import com.example.homeManager.api.models.responses.InvitacionResponse;
-import com.example.homeManager.utils.EstadoInvitacion;
+import com.example.homemanager.api.models.request.InvitacionRequest;
+import com.example.homemanager.api.models.responses.InvitacionResponse;
+import com.example.homemanager.utils.EstadoInvitacion;
 
 import java.util.Set;
 

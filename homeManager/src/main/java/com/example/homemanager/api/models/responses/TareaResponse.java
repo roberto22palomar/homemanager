@@ -1,7 +1,7 @@
-package com.example.homeManager.api.models.responses;
+package com.example.homemanager.api.models.responses;
 
-import com.example.homeManager.utils.EstadoTarea;
-import com.example.homeManager.utils.Periodicidad;
+import com.example.homemanager.utils.EstadoTarea;
+import com.example.homemanager.utils.Periodicidad;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

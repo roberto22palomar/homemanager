@@ -1,4 +1,4 @@
-package com.example.homeManager;
+package com.example.homemanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

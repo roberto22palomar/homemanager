@@ -1,6 +1,6 @@
-package com.example.homeManager.api.models.request;
+package com.example.homemanager.api.models.request;
 
-import com.example.homeManager.utils.Periodicidad;
+import com.example.homemanager.utils.Periodicidad;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

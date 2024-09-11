@@ -1,7 +1,7 @@
-package com.example.homeManager.domain.documents;
+package com.example.homemanager.domain.documents;
 
-import com.example.homeManager.utils.EstadoTarea;
-import com.example.homeManager.utils.Periodicidad;
+import com.example.homemanager.utils.EstadoTarea;
+import com.example.homemanager.utils.Periodicidad;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

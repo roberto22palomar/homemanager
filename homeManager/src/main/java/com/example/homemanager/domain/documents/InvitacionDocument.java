@@ -1,7 +1,7 @@
-package com.example.homeManager.domain.documents;
+package com.example.homemanager.domain.documents;
 
-import com.example.homeManager.utils.EstadoInvitacion;
-import com.example.homeManager.utils.InvitacionVigente;
+import com.example.homemanager.utils.EstadoInvitacion;
+import com.example.homemanager.utils.InvitacionVigente;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

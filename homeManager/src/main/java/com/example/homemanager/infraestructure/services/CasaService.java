@@ -96,6 +96,8 @@ public class CasaService implements ICasaService {
 
         casaToUpdate.getIdMiembros().add(user.getId());
 
+        casaToUpdate.getPuntos().put(user.getId(),0);
+
         var casaUpdated = casaRepository.save(casaToUpdate);
 
         return entityToResponse(casaUpdated);

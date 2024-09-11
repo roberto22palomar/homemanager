@@ -2,8 +2,10 @@ package com.example.homemanager.api.controllers;
 
 import com.example.homemanager.api.models.request.CasaRequest;
 import com.example.homemanager.api.models.responses.CasaResponse;
+import com.example.homemanager.api.models.responses.InvitacionResponse;
 import com.example.homemanager.api.models.responses.TareaResponse;
 import com.example.homemanager.infraestructure.abstract_services.ICasaService;
+import com.example.homemanager.utils.EstadoInvitacion;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,14 @@ public class CasaController {
     public ResponseEntity<CasaResponse> getCasa(@PathVariable String id) {
 
         return ResponseEntity.ok(casaService.read(id));
+    }
+
+    @PutMapping("/addMiembro/{id}")
+    public ResponseEntity<CasaResponse> addMiembro(
+            @PathVariable String id,
+            @RequestParam("idUser") String idUser) {
+
+        return ResponseEntity.ok(casaService.addMember(id,idUser));
     }
 
     @DeleteMapping("{id}")

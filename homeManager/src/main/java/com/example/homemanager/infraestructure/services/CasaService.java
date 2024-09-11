@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,6 +63,7 @@ public class CasaService implements ICasaService {
                 .nombre(request.getNombre())
                 .idMiembros(request.getIdMiembros())
                 .idTareas(request.getIdTareas())
+                .puntos(new HashMap<>())
                 .build();
 
         var casaPersisted = casaRepository.save(casaToPersist);
@@ -86,6 +88,19 @@ public class CasaService implements ICasaService {
 
 
     }
+
+    public CasaResponse addMember(String idCasa, String idUser) {
+
+        var casaToUpdate = casaRepository.findById(idCasa).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+        var user = userRepository.findById(idUser).orElseThrow(() -> new IdNotFoundException("Usuario no encontrado con ese ID."));
+
+        casaToUpdate.getIdMiembros().add(user.getId());
+
+        var casaUpdated = casaRepository.save(casaToUpdate);
+
+        return entityToResponse(casaUpdated);
+    }
+
 
     @Override
     public CasaResponse read(String id) {

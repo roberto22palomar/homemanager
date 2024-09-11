@@ -8,4 +8,6 @@ import java.util.Set;
 
 public interface ICasaService extends CrudService<CasaRequest, CasaResponse, String> {
     Set<TareaResponse> getTareasCasa(String id);
+
+    CasaResponse addMember(String idCasa, String idUser);
 }

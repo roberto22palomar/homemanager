@@ -39,5 +39,12 @@ public class InvitacionController {
         return ResponseEntity.ok(invitacionService.getInvitaciones(email));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> borrarTarea(
+            @PathVariable String id) {
+        invitacionService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

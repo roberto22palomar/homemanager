@@ -30,4 +30,11 @@ public class CasaController {
         return ResponseEntity.ok(casaService.getTareasCasa(id));
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteCasa(
+            @PathVariable String id) {
+        casaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

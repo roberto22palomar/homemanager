@@ -1,12 +1,12 @@
-package com.example.homeManager.infraestructure.services;
+package com.example.homemanager.infraestructure.services;
 
-import com.example.homeManager.api.models.request.UserRequest;
-import com.example.homeManager.api.models.responses.UserResponse;
-import com.example.homeManager.domain.documents.CasaDocument;
-import com.example.homeManager.domain.documents.UserDocument;
-import com.example.homeManager.domain.repositories.CasaRepository;
-import com.example.homeManager.domain.repositories.UserRepository;
-import com.example.homeManager.infraestructure.abstract_services.IUserService;
+import com.example.homemanager.api.models.request.UserRequest;
+import com.example.homemanager.api.models.responses.UserResponse;
+import com.example.homemanager.domain.documents.CasaDocument;
+import com.example.homemanager.domain.documents.UserDocument;
+import com.example.homemanager.domain.repositories.CasaRepository;
+import com.example.homemanager.domain.repositories.UserRepository;
+import com.example.homemanager.infraestructure.abstract_services.IUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

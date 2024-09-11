@@ -1,8 +1,8 @@
-package com.example.homeManager.infraestructure.abstract_services;
+package com.example.homemanager.infraestructure.abstract_services;
 
-import com.example.homeManager.api.models.request.CasaRequest;
-import com.example.homeManager.api.models.responses.CasaResponse;
-import com.example.homeManager.api.models.responses.TareaResponse;
+import com.example.homemanager.api.models.request.CasaRequest;
+import com.example.homemanager.api.models.responses.CasaResponse;
+import com.example.homemanager.api.models.responses.TareaResponse;
 
 import java.util.Set;
 

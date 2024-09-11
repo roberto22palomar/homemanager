@@ -1,4 +1,4 @@
-package com.example.homeManager.infraestructure.abstract_services;
+package com.example.homemanager.infraestructure.abstract_services;
 
 public interface CrudService<RQ, RS, ID> {
 

@@ -1,6 +1,6 @@
-package com.example.homeManager.api.models.responses;
+package com.example.homemanager.api.models.responses;
 
-import com.example.homeManager.domain.documents.CasaDocument;
+import com.example.homemanager.domain.documents.CasaDocument;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

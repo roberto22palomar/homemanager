@@ -1,9 +1,9 @@
-package com.example.homeManager.api.controllers;
+package com.example.homemanager.api.controllers;
 
-import com.example.homeManager.api.models.request.TareaRequest;
-import com.example.homeManager.api.models.responses.TareaResponse;
-import com.example.homeManager.infraestructure.abstract_services.ITareaService;
-import com.example.homeManager.utils.EstadoTarea;
+import com.example.homemanager.api.models.request.TareaRequest;
+import com.example.homemanager.api.models.responses.TareaResponse;
+import com.example.homemanager.infraestructure.abstract_services.ITareaService;
+import com.example.homemanager.utils.EstadoTarea;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

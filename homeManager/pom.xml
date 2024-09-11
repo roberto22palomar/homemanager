@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>homeManager</artifactId>
+	<artifactId>homemanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>home_manager</name>
 	<description>Proyecto para homemanagement</description>

@@ -1,4 +1,4 @@
-package com.example.homeManager.utils.exceptions;
+package com.example.homemanager.utils.exceptions;
 
 public class IdNotFoundException extends RuntimeException {
 

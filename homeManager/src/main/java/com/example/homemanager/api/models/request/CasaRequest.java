@@ -1,7 +1,5 @@
-package com.example.homeManager.api.models.request;
+package com.example.homemanager.api.models.request;
 
-import com.example.homeManager.domain.documents.TareaDocument;
-import com.example.homeManager.domain.documents.UserDocument;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +15,6 @@ public class CasaRequest {
 
     private String nombre;
     private Set<String> idMiembros;
-    private Set<String> IdTareas;
+    private Set<String> idTareas;
 
 }

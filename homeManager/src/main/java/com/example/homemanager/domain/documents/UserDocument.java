@@ -1,4 +1,4 @@
-package com.example.homeManager.domain.documents;
+package com.example.homemanager.domain.documents;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

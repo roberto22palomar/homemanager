@@ -1,8 +1,8 @@
-package com.example.homeManager.api.controllers;
+package com.example.homemanager.api.controllers;
 
-import com.example.homeManager.api.models.request.UserRequest;
-import com.example.homeManager.api.models.responses.UserResponse;
-import com.example.homeManager.infraestructure.abstract_services.IUserService;
+import com.example.homemanager.api.models.request.UserRequest;
+import com.example.homemanager.api.models.responses.UserResponse;
+import com.example.homemanager.infraestructure.abstract_services.IUserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

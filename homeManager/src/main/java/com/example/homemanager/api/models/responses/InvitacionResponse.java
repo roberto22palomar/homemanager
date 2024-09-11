@@ -1,7 +1,7 @@
-package com.example.homeManager.api.models.responses;
+package com.example.homemanager.api.models.responses;
 
-import com.example.homeManager.utils.EstadoInvitacion;
-import com.example.homeManager.utils.InvitacionVigente;
+import com.example.homemanager.utils.EstadoInvitacion;
+import com.example.homemanager.utils.InvitacionVigente;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.example.homeManager.api.models.responses.error;
+package com.example.homemanager.api.models.responses.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

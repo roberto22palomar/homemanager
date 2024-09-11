@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class CasaDocument implements Serializable {
     private String nombre;
     private Set<String> idMiembros;
     private Set<String> idTareas;
+    private Map<String,Integer> puntos;
 
 
 }

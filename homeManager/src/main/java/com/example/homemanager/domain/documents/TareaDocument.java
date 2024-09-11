@@ -28,5 +28,6 @@ public class TareaDocument implements Serializable {
     private String idUsuarioAsignado;
     private String idCasa;
     private Integer puntos;
+    private boolean puntosAsignados;
 
 }

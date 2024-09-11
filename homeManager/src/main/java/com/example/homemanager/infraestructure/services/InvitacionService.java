@@ -29,6 +29,7 @@ public class InvitacionService implements IInvitacionService {
     private final CasaRepository casaRepository;
     private final UserRepository userRepository;
     private final InvitacionRepository invitacionRepository;
+    private final CasaService casaService;
 
     @Override
     public InvitacionResponse create(InvitacionRequest request) {
@@ -77,8 +78,8 @@ public class InvitacionService implements IInvitacionService {
 
                 var casa = casaRepository.findById(invitacionToUpdate.getIdCasa()).orElseThrow();
                 var user = userRepository.findByEmail(invitacionToUpdate.getEmail());
-                casa.getIdMiembros().add(user.getId());
-                casaRepository.save(casa);
+
+                casaService.addMember(casa.getId(), user.getId());
 
                 log.info("Invitación aceptada y finalizada -> Miembro: {} añadido a la casa {}", user.getId(), casa.getId());
 

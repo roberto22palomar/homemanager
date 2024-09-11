@@ -42,6 +42,7 @@ public class TareaService implements ITareaService {
                 .idUsuarioAsignado(request.getIdUsuarioAsignado())
                 .idCasa(request.getIdCasa())
                 .puntos(request.getPuntos())
+                .puntosAsignados(false)
                 .build();
 
 
@@ -56,14 +57,40 @@ public class TareaService implements ITareaService {
         return entityToResponse(tareaPersisted);
     }
 
-    public TareaResponse updateEstado(String id, EstadoTarea estado) {
+    public TareaResponse updateEstado(String id, EstadoTarea nuevoEstado) {
 
-        var tareaToUpdate = tareasRepository.findById(id).orElseThrow();
-        tareaToUpdate.setEstado(estado);
+        var tareaToUpdate = tareasRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException("Tarea no encontrada con ese ID."));
+
+        var casa = casaRepository.findById(tareaToUpdate.getIdCasa())
+                .orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+
+        if (nuevoEstado.equals(EstadoTarea.FINALIZADA)) {
+
+            if (!tareaToUpdate.isPuntosAsignados()) {
+                casa.getPuntos().merge(tareaToUpdate.getIdUsuarioAsignado(), tareaToUpdate.getPuntos(), Integer::sum);
+                tareaToUpdate.setPuntosAsignados(true);
+                log.info("Puntos asignados para la tarea {} al usuario {}", tareaToUpdate.getNombre(), tareaToUpdate.getIdUsuarioAsignado());
+            }
+
+
+        } else if (tareaToUpdate.getEstado().equals(EstadoTarea.FINALIZADA) && !nuevoEstado.equals(EstadoTarea.FINALIZADA)) {
+
+            if (tareaToUpdate.isPuntosAsignados()) {
+                casa.getPuntos().merge(tareaToUpdate.getIdUsuarioAsignado(), -tareaToUpdate.getPuntos(), Integer::sum);
+                tareaToUpdate.setPuntosAsignados(false);  // Marcar que los puntos fueron removidos
+                log.info("Puntos removidos para la tarea {} del usuario {}", tareaToUpdate.getNombre(), tareaToUpdate.getIdUsuarioAsignado());
+            }
+        }
+
+
+        casaRepository.save(casa);
+        tareaToUpdate.setEstado(nuevoEstado);
         tareasRepository.save(tareaToUpdate);
+        
         return entityToResponse(tareaToUpdate);
-
     }
+
 
     @Override
     public TareaResponse read(String s) {

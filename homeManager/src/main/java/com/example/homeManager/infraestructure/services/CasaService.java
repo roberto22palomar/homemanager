@@ -11,6 +11,7 @@ import com.example.homeManager.domain.repositories.CasaRepository;
 import com.example.homeManager.domain.repositories.TareaRepository;
 import com.example.homeManager.domain.repositories.UserRepository;
 import com.example.homeManager.infraestructure.abstract_services.ICasaService;
+import com.example.homeManager.utils.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -72,8 +73,9 @@ public class CasaService implements ICasaService {
 
     public Set<TareaResponse> getTareasCasa(String id) {
 
-        List<TareaDocument> tareas = tareasRepository.findTareasCasa(id);
+        var casa = casaRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Casa no encontrada con ese ID."));
 
+        List<TareaDocument> tareas = tareasRepository.findAllById(casa.getIdTareas());
         Set<TareaResponse> tareasResponse = new HashSet<>();
 
         tareas.forEach(tarea -> {

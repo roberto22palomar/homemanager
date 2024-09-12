@@ -73,21 +73,23 @@ public class TareaService implements ITareaService {
                 log.info("Puntos asignados para la tarea {} al usuario {}", tareaToUpdate.getNombre(), tareaToUpdate.getIdUsuarioAsignado());
             }
 
+            // Verificar si la tarea estaba en estado "FINALIZADA" y se está cambiando a otro estado
+        } else if (tareaToUpdate.getEstado().equals(EstadoTarea.FINALIZADA) && tareaToUpdate.isPuntosAsignados()) {
 
-        } else if (tareaToUpdate.getEstado().equals(EstadoTarea.FINALIZADA) && !nuevoEstado.equals(EstadoTarea.FINALIZADA)) {
-
-            if (tareaToUpdate.isPuntosAsignados()) {
-                casa.getPuntos().merge(tareaToUpdate.getIdUsuarioAsignado(), -tareaToUpdate.getPuntos(), Integer::sum);
-                tareaToUpdate.setPuntosAsignados(false);  // Marcar que los puntos fueron removidos
-                log.info("Puntos removidos para la tarea {} del usuario {}", tareaToUpdate.getNombre(), tareaToUpdate.getIdUsuarioAsignado());
-            }
+            // Si los puntos ya fueron asignados, restarlos al cambiar de estado
+            casa.getPuntos().merge(tareaToUpdate.getIdUsuarioAsignado(), -tareaToUpdate.getPuntos(), Integer::sum);
+            tareaToUpdate.setPuntosAsignados(false);  // Marcar que los puntos fueron removidos
+            log.info("Puntos removidos para la tarea {} del usuario {}", tareaToUpdate.getNombre(), tareaToUpdate.getIdUsuarioAsignado());
         }
 
-
+        // Guardar la casa actualizada
         casaRepository.save(casa);
+
+        // Actualizar el estado de la tarea
         tareaToUpdate.setEstado(nuevoEstado);
         tareasRepository.save(tareaToUpdate);
-        
+
+        // Retornar la tarea actualizada como respuesta
         return entityToResponse(tareaToUpdate);
     }
 

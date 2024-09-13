@@ -9,4 +9,7 @@ public interface UserRepository extends MongoRepository<UserDocument, String> {
     @Query("{ 'email': ?0 }")
     UserDocument findByEmail(String email);
 
+    @Query("{ 'username': ?0 }")
+    UserDocument findByUsername(String username);
+
 }

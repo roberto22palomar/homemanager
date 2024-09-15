@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Casa Manager</h1>
+
+<!-- Formulario para crear una casa -->
+<h2>Create Casa</h2>
+<form id="createCasaForm">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+    <button type="submit">Create Casa</button>
+</form>
+
+<!-- Formulario para obtener una casa -->
+<h2>Get Casa</h2>
+<form id="getCasaForm">
+    <label for="getCasaId">ID:</label>
+    <input type="text" id="getCasaId" name="id" required>
+    <button type="submit">Get Casa</button>
+</form>
+<div id="casaDetails"></div>
+
+<!-- Formulario para añadir miembro -->
+<h2>Add Miembro</h2>
+<form id="addMiembroForm">
+    <label for="addMiembroId">Casa ID:</label>
+    <input type="text" id="addMiembroId" name="casaId" required>
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" name="userId" required>
+    <button type="submit">Add Miembro</button>
+</form>
+
+<!-- Formulario para eliminar una casa -->
+<h2>Delete Casa</h2>
+<form id="deleteCasaForm">
+    <label for="deleteCasaId">ID:</label>
+    <input type="text" id="deleteCasaId" name="id" required>
+    <button type="submit">Delete Casa</button>
+</form>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

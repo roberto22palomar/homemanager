@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="#">Home Manager</a>
+        <div class="navbar-right">
+            <div id="userDropdown" class="dropdown">
+                <button class="dropbtn">Select House</button>
+                <div id="dropdownMenu" class="dropdown-content">
+                    <!-- Options will be populated here -->
+                </div>
+            </div>
+            <a href="/logout" class="btn btn-logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+     try {
+         const response = await fetch('/homemanager/user/current-user', {
+             credentials: 'include'
+         });
+
+         if (response.ok) {
+             const user = await response.json();
+             console.log('User response:', user); // Depura la respuesta del servidor
+
+             const dropdownMenu = document.getElementById('dropdownMenu');
+
+             // Asegúrate de que `user.casas` está definido y es un array
+             if (user && Array.isArray(user.casas)) {
+                 // Limpia el contenido previo del menú
+                 dropdownMenu.innerHTML = '';
+
+                 if (user.casas.length > 0) {
+                     user.casas.forEach(id => {
+                         const option = document.createElement('a');
+                         option.href = `/homemanager/casa/${id}`; // Ajusta la URL según tu lógica
+                         option.textContent = `House ${id}`;
+                         dropdownMenu.appendChild(option);
+                     });
+                 } else {
+                     dropdownMenu.innerHTML = '<a href="#">No Houses Available</a>';
+                 }
+             } else {
+                 console.error('Houses not available or is not an array');
+                 dropdownMenu.innerHTML = '<a href="#">No Houses Available</a>';
+             }
+         } else {
+             window.location.href = 'login.html';
+         }
+     } catch (error) {
+         console.error('Failed to fetch user info:', error);
+     }
+ });
+
+</script>
+</body>
+</html>

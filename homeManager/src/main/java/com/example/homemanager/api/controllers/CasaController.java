@@ -20,11 +20,6 @@ public class CasaController {
 
     private final ICasaService casaService;
 
-    @GetMapping("/viewCasa")
-    public String viewCasa() {
-        return "index"; // Nombre del archivo HTML sin la extensión .html
-    }
-
     @PostMapping
     public ResponseEntity<CasaResponse> post(@Valid @RequestBody CasaRequest request) {
 

@@ -40,7 +40,7 @@ public class UserService implements IUserService {
 
         BeanUtils.copyProperties(entity, userResponse);
 
-        response.setCasas(casasUser);
+        response.setCasas(entity.getCasas());
 
         return response;
 
@@ -68,22 +68,25 @@ public class UserService implements IUserService {
 
         var user = userRepository.findByUsername(request.getUsername());
 
-        if (user.getPassword().equals(securityConfig.passwordEncoder().encode(request.getPassword()))) {
-            log.info("Creedenciales correctas del usuario {}", request.getUsername());
-
-        } else {
-            log.info("Creedenciales incorrectas del usuario {}", request.getUsername());
-            throw new UserCredentialsException("Las creedenciales son incorrectas");
-
+        // Verifica si el usuario existe
+        if (user == null) {
+            log.info("Usuario no encontrado: {}", request.getUsername());
+            throw new UserCredentialsException("Usuario no encontrado");
         }
 
-
-        return entityToResponse(user);
-
+        // Compara la contraseña proporcionada con la contraseña almacenada
+        if (securityConfig.passwordEncoder().matches(request.getPassword(), user.getPassword())) {
+            log.info("Credenciales correctas del usuario {}", request.getUsername());
+            return entityToResponse(user);
+        } else {
+            log.info("Credenciales incorrectas del usuario {}", request.getUsername());
+            throw new UserCredentialsException("Las credenciales son incorrectas");
+        }
     }
 
     @Override
-    public UserResponse read(String s) {
+    public UserResponse read(String id) {
+
         return null;
     }
 

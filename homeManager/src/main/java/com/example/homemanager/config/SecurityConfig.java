@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private static final String LOGIN_RESOURCE = "/login";
-    private static final String[] USER_RESOURCE = {"/tarea/**", "/casa/**", "/invitacion/**"};
+    private static final String[] USER_RESOURCE = {"/dashboard/**", "/casa/**", "/invitacion/**","/tarea/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

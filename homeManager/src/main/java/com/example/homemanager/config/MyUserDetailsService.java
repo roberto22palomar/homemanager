@@ -17,18 +17,21 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository; // Repositorio para acceder a los datos del usuario
- //
+    //
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDocument userResponse = userRepository.findByUsername(username);
-        if (userResponse == null) {
+        UserDocument userDocument = userRepository.findByUsername(username);
+        if (userDocument == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new org.springframework.security.core.userdetails.User(
-                userResponse.getUsername(),
-                userResponse.getPassword(),
-                new ArrayList<>() // Agrega roles o permisos si es necesario
+        return new CustomUserDetails(
+                userDocument.getUsername(),
+                userDocument.getPassword(),
+                userDocument.getId(), // Asumiendo que el ID está disponible aquí
+                userDocument.getEmail(),
+                userDocument.getCasas(),
+                new ArrayList<>()
         );
     }
 }

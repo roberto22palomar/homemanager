@@ -1,49 +1,77 @@
-document.addEventListener('DOMContentLoaded', () => {
+const API_URL = 'http://localhost:8080'; // Ajusta según tu configuración
 
-    // Create Casa
-    document.getElementById('createCasaForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const nombre = document.getElementById('nombre').value;
-        const response = await fetch('/casa', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nombre })
-        });
-        const result = await response.json();
-        alert(`Casa created: ${JSON.stringify(result)}`);
+// Login functionality
+document.getElementById('loginForm')?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ username, password }),
     });
 
-    // Get Casa
-    document.getElementById('getCasaForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = document.getElementById('getCasaId').value;
-        const response = await fetch(`/casa/${id}`);
-        const result = await response.json();
-        document.getElementById('casaDetails').innerText = JSON.stringify(result, null, 2);
-    });
-
-    // Add Miembro
-    document.getElementById('addMiembroForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const casaId = document.getElementById('addMiembroId').value;
-        const userId = document.getElementById('userId').value;
-        const response = await fetch(`/casa/addMiembro/${casaId}?idUser=${userId}`, {
-            method: 'PUT'
-        });
-        const result = await response.json();
-        alert(`Miembro added: ${JSON.stringify(result)}`);
-    });
-
-    // Delete Casa
-    document.getElementById('deleteCasaForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = document.getElementById('deleteCasaId').value;
-        await fetch(`/casa/${id}`, {
-            method: 'DELETE'
-        });
-        alert('Casa deleted');
-    });
-
+    if (response.ok) {
+      window.location.href = 'dashboard.html';
+    } else {
+      document.getElementById('loginError').innerText = 'Invalid credentials';
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+  }
 });
+
+// Fetch user info for dashboard
+if (document.getElementById('userInfo')) {
+  (async () => {
+    try {
+      const response = await fetch(`${API_URL}/homemanager/user/current-user`, {
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        document.getElementById('userInfo').innerText = `Welcome, ${user.username}!`;
+      } else {
+        window.location.href = 'login.html';
+      }
+    } catch (error) {
+      console.error('Failed to fetch user info:', error);
+    }
+  })();
+}
+
+// Fetch and manage casas
+if (document.getElementById('createCasaForm')) {
+  document.getElementById('createCasaForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = document.getElementById('casaName').value;
+
+    try {
+      const response = await fetch(`${API_URL}/homemanager/casa`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ name }),
+      });
+
+      if (response.ok) {
+        alert('Casa created successfully');
+        // Refresh list of casas or redirect
+      } else {
+        alert('Failed to create casa');
+      }
+    } catch (error) {
+      console.error('Failed to create casa:', error);
+    }
+  });
+}
+
+// Similarly, implement functionality for tasks and invitations

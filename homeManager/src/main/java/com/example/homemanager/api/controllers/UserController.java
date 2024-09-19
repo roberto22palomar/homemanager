@@ -4,6 +4,7 @@ import com.example.homemanager.api.models.request.UserRequest;
 import com.example.homemanager.api.models.responses.UserResponse;
 import com.example.homemanager.config.CustomUserDetails;
 import com.example.homemanager.infraestructure.abstract_services.IUserService;
+import com.example.homemanager.utils.exceptions.UserCredentialsException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class UserController {
                     .casas(userDetails.getCasas())
                     .build();
         } else {
-            throw new RuntimeException("No authenticated user found");
+            throw new UserCredentialsException("No authenticated user found");
         }
     }
 

@@ -2,10 +2,8 @@ package com.example.homemanager.api.controllers;
 
 import com.example.homemanager.api.models.request.CasaRequest;
 import com.example.homemanager.api.models.responses.CasaResponse;
-import com.example.homemanager.api.models.responses.InvitacionResponse;
 import com.example.homemanager.api.models.responses.TareaResponse;
 import com.example.homemanager.infraestructure.abstract_services.ICasaService;
-import com.example.homemanager.utils.EstadoInvitacion;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

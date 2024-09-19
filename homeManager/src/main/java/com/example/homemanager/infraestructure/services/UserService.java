@@ -36,8 +36,6 @@ public class UserService implements IUserService {
         BeanUtils.copyProperties(entity, response);
         var userResponse = new UserResponse();
 
-        Set<CasaDocument> casasUser = new HashSet<>(casaRepository.findAllById(entity.getCasas()));
-
         BeanUtils.copyProperties(entity, userResponse);
 
         response.setCasas(entity.getCasas());

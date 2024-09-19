@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Tareas</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            margin-bottom: 1rem;
+        }
+        .column-header {
+            margin-bottom: 1rem;
+        }
+        .droppable {
+            border: 2px dashed #ccc;
+            min-height: 150px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Barra de navegación superior -->
+<div id="navbar-placeholder"></div>
+
+
+<div class="container mt-4">
+    <h1 class="mb-4">Tareas</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <h2 class="column-header">Sin Comenzar</h2>
+            <div id="SIN_COMENZAR" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+        <div class="col-md-4">
+            <h2 class="column-header">En Curso</h2>
+            <div id="EN_CURSO" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+        <div class="col-md-4">
+            <h2 class="column-header">Finalizada</h2>
+            <div id="FINALIZADA" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS y dependencias de Popper -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Función para cargar la navbar
+
+   document.addEventListener('DOMContentLoaded', function() {
+       fetch('navbar.html')
+           .then(response => response.text())
+           .then(data => {
+               document.getElementById('navbar-placeholder').innerHTML = data;
+           })
+           .catch(error => console.error('Error loading navbar:', error));
+   });
+
+   // Función para permitir el drop en las columnas
+   function allowDrop(ev) {
+       ev.preventDefault();
+   }
+
+   // Función para arrastrar la tarea
+   function drag(ev) {
+       ev.dataTransfer.setData("text", ev.target.id);
+   }
+
+   // Función para soltar la tarea en la nueva columna
+   function drop(ev) {
+       ev.preventDefault();
+       const taskId = ev.dataTransfer.getData("text");
+       const newState = ev.target.id;  // Ahora se toma directamente el ID de la columna
+
+       // Mueve la tarea visualmente
+       ev.target.appendChild(document.getElementById(taskId));
+
+       // Actualiza el estado de la tarea en el servidor
+       fetch(`/homemanager/tarea/${taskId}/estado?nuevoEstado=${newState}`, {
+           method: 'PUT'
+       }).then(response => response.json())
+         .then(data => console.log('Task updated:', data))
+         .catch(error => console.error('Error updating task:', error));
+   }
+
+   // Carga de tareas
+   document.addEventListener('DOMContentLoaded', async () => {
+       try {
+           const userResponse = await fetch('/homemanager/user/current-user', { credentials: 'include' });
+
+           if (userResponse.ok) {
+               const user = await userResponse.json();
+               const casaId = user.casas[0];
+
+               const tasksResponse = await fetch(`/homemanager/casa/getTareas/${casaId}`, { credentials: 'include' });
+
+               if (tasksResponse.ok) {
+                   const tareas = await tasksResponse.json();
+
+                   const tareasPorEstado = {
+                       SIN_COMENZAR: [],
+                       EN_CURSO: [],
+                       FINALIZADA: []
+                   };
+
+                   tareas.forEach(tarea => {
+                       if (tareasPorEstado[tarea.estado]) {
+                           tareasPorEstado[tarea.estado].push(tarea);
+                       }
+                   });
+
+                   ['SIN_COMENZAR', 'EN_CURSO', 'FINALIZADA'].forEach(estado => {
+                       const container = document.getElementById(estado);
+                       if (container) {
+                           tareasPorEstado[estado].forEach(tarea => {
+                               const card = document.createElement('div');
+                               card.className = 'card';
+                               card.id = tarea.id;
+                               card.draggable = true;
+                               card.ondragstart = drag;
+                               card.innerHTML = `
+                                   <div class="card-body">
+                                       <h5 class="card-title">${tarea.nombre}</h5>
+                                       <h6 class="card-subtitle mb-2 text-muted">Creación: ${new Date(tarea.fechaCreacion).toLocaleString()}</h6>
+                                       <p class="card-text">${tarea.descripcion}</p>
+                                       <p class="card-text">Vence: ${new Date(tarea.fechaVencimiento).toLocaleString()}</p>
+                                       <p class="card-text">Asignado a: ${tarea.usuarioAsignado ? tarea.usuarioAsignado.username : 'N/A'}</p>
+                                   </div>
+                               `;
+                               container.appendChild(card);
+                           });
+                       }
+                   });
+               }
+           } else {
+               console.error('Failed to fetch user info');
+           }
+       } catch (error) {
+           console.error('Error:', error);
+       }
+   });
+</script>
+</body>
+</html>

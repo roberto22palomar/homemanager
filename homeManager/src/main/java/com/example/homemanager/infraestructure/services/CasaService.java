@@ -29,9 +29,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class CasaService implements ICasaService {
 
+    private static final String CASA_NOT_FOUND = "Casa no encontrada con ese ID.";
+
     private final CasaRepository casaRepository;
     private final UserRepository userRepository;
     private final TareaRepository tareasRepository;
+
 
     private CasaResponse entityToResponse(CasaDocument entity) {
         var response = new CasaResponse();
@@ -75,7 +78,7 @@ public class CasaService implements ICasaService {
 
     public Set<TareaResponse> getTareasCasa(String id) {
 
-        var casa = casaRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+        var casa = casaRepository.findById(id).orElseThrow(() -> new IdNotFoundException(CASA_NOT_FOUND));
 
         List<TareaDocument> tareas = tareasRepository.findAllById(casa.getIdTareas());
         Set<TareaResponse> tareasResponse = new HashSet<>();
@@ -91,7 +94,7 @@ public class CasaService implements ICasaService {
 
     public CasaResponse addMember(String idCasa, String idUser) {
 
-        var casaToUpdate = casaRepository.findById(idCasa).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+        var casaToUpdate = casaRepository.findById(idCasa).orElseThrow(() -> new IdNotFoundException(CASA_NOT_FOUND));
         var user = userRepository.findById(idUser).orElseThrow(() -> new IdNotFoundException("Usuario no encontrado con ese ID."));
 
         casaToUpdate.getIdMiembros().add(user.getId());
@@ -107,7 +110,7 @@ public class CasaService implements ICasaService {
     @Override
     public CasaResponse read(String id) {
 
-        var casa = casaRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Casa no encontrada con ese ID."));
+        var casa = casaRepository.findById(id).orElseThrow(() -> new IdNotFoundException(CASA_NOT_FOUND));
 
         return entityToResponse(casa);
     }

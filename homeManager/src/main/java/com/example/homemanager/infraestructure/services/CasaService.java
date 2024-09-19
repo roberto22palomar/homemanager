@@ -137,7 +137,7 @@ public class CasaService implements ICasaService {
         BeanUtils.copyProperties(entity, response);
         var tareaResponse = new TareaResponse();
         BeanUtils.copyProperties(entity, tareaResponse);
-        response.setUsuarioAsignado(entityUserToMiembroResponse(userRepository.findById(entity.getIdUsuarioAsignado()).orElseThrow()));
+        response.setUsuarioAsignado(entityUserToMiembroResponse(userRepository.findById(entity.getIdUsuarioAsignado()).orElseThrow(()-> new IdNotFoundException("Usuario no encontrado con ese id."))));
         return response;
 
     }

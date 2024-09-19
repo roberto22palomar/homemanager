@@ -2,6 +2,7 @@ package com.example.homemanager.config;
 
 import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,8 +13,8 @@ import java.util.ArrayList;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository; // Repositorio para acceder a los datos del usuario
-    //
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(
                 userDocument.getUsername(),
                 userDocument.getPassword(),
-                userDocument.getId(), // Asumiendo que el ID está disponible aquí
+                userDocument.getId(),
                 userDocument.getEmail(),
                 userDocument.getCasas(),
                 new ArrayList<>()

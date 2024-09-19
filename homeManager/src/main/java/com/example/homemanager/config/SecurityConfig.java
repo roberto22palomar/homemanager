@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private static final String LOGIN_RESOURCE = "/login";
-    private static final String[] USER_RESOURCE = {"/dashboard/**", "/casa/**", "/invitacion/**","/tarea/**"};
+    private static final String[] USER_RESOURCE = {"/dashboard/**", "/casa/**", "/invitacion/**", "/tarea/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,6 +35,7 @@ public class SecurityConfig {
                 // Configuración del login
                 .formLogin(form -> form
                         .loginProcessingUrl("/login") // URL para procesar la solicitud de login
+                        .defaultSuccessUrl("/dashboard.html", true)
                         .permitAll()  // Permitir acceso sin autenticación a la página de login
                 )
                 // Configuración del logout

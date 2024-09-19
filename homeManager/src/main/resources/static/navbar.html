@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/homemanager/dashboard.html">Home Manager</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <!-- Enlaces a otras URL -->
+            <li class="nav-item">
+                <a class="nav-link" href="/homemanager/casa.html">Casa</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/homemanager/tareas.html">Tareas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/homemanager/geolocalizacion.html">Geolocalización</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/homemanager/invitaciones.html">Invitaciones</a>
+            </li>
+
+            <!-- Selector de casa -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="houseDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span id="housePlaceholder">Select House</span>
+                </a>
+                <div id="dropdownMenu" class="dropdown-menu dropdown-menu-right" aria-labelledby="houseDropdown">
+                    <!-- Opciones de las casas aquí -->
+                </div>
+            </li>
+
+            <!-- Ajustes del usuario y Logout -->
+            <li class="nav-item">
+                <a class="nav-link" href="/homemanager/settings.html">Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-danger text-white" href="/homemanager/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const userResponse = await fetch('/homemanager/user/current-user', { credentials: 'include' });
+
+            if (userResponse.ok) {
+                const user = await userResponse.json();
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                const housePlaceholder = document.getElementById('housePlaceholder');
+
+                if (user.casas && user.casas.length > 0) {
+                    const firstHouseId = user.casas[0]; // Usa el primer ID de casa como placeholder
+                    housePlaceholder.textContent = `House ${firstHouseId}`;
+
+                    user.casas.forEach(id => {
+                        const option = document.createElement('a');
+                        option.className = 'dropdown-item';
+                        option.href = `/homemanager/casa/${id}`;
+                        option.textContent = `House ${id}`;
+                        dropdownMenu.appendChild(option);
+                    });
+                } else {
+                    housePlaceholder.textContent = 'No Houses Available';
+                    const noHouses = document.createElement('a');
+                    noHouses.className = 'dropdown-item';
+                    noHouses.textContent = 'No Houses Available';
+                    dropdownMenu.appendChild(noHouses);
+                }
+            } else {
+                console.error('Failed to fetch user info');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+</script>

@@ -22,6 +22,66 @@
     <button type="submit">Create Casa</button>
 </form>
 <div id="casaList"></div>
-<script src="js/app.js"></script>
+
+<script>
+    const API_URL = 'http://localhost:8080';  // Asegúrate de que esta es la URL correcta de tu backend
+
+    let currentUserId = '';  // Variable para almacenar el ID del usuario logado
+
+    // Obtener el ID del usuario logado
+    async function fetchCurrentUserId() {
+        try {
+            const response = await fetch(`${API_URL}/homemanager/user/current-user`, {
+                credentials: 'include'
+            });
+            if (response.ok) {
+                const user = await response.json();
+                currentUserId = user.id;  // Guardamos el ID del usuario logado
+            } else {
+                console.error('Failed to fetch current user');
+            }
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+        }
+    }
+
+    // Ejecutamos al cargar la página
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchCurrentUserId();  // Obtenemos el ID del usuario logado antes de cualquier acción
+    });
+
+    // Manejo del formulario de creación de casa
+    if (document.getElementById('createCasaForm')) {
+        document.getElementById('createCasaForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const name = document.getElementById('casaName').value;
+
+            try {
+                // Crear la nueva casa con el ID del usuario logado
+                const response = await fetch(`${API_URL}/homemanager/casa`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        nombre: name,
+                        idMiembros: [currentUserId],  // Añadimos el ID del usuario logado
+                        idTareas: []
+                    }),
+                });
+
+                if (response.ok) {
+                    alert('Casa created successfully');
+                    // Aquí puedes refrescar la lista de casas o redirigir a otra página
+                } else {
+                    alert('Failed to create casa');
+                }
+            } catch (error) {
+                console.error('Failed to create casa:', error);
+            }
+        });
+    }
+</script>
 </body>
 </html>

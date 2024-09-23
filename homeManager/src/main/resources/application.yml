@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: home_manager
+  datasource:
+    url: jdbc:mongodb://localhost:27017/homemanager
+
+server:
+  servlet:
+    context-path: /homemanager
+
+application:
+  security:
+    jwt:
+      secret-key: d83f5a1e3e00494e920ddc735f2d4c1e5f846569a8e452ed84c6ba0fd68e9293
+      expiration: 86400000
+      refresh-token:
+        expiration: 86400000
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

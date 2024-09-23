@@ -1,60 +1,79 @@
 package com.example.homemanager.config;
 
+import com.example.homemanager.auth.models.TokenDocument;
+import com.example.homemanager.auth.repository.TokenRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final TokenRepository tokenRepository;
     private static final String LOGIN_RESOURCE = "/login";
     private static final String[] USER_RESOURCE = {"/dashboard/**", "/casa/**", "/invitacion/**", "/tarea/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                // Configuración de autorización de solicitudes
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                // Permitir acceso sin autenticación a la página de login y recursos estáticos
-                                .requestMatchers(LOGIN_RESOURCE, "/css/**", "/js/**").permitAll()
-                                .requestMatchers("/user").permitAll()
-                                // Proteger las rutas de usuario
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers("/auth/**")
+                                .permitAll()
                                 .requestMatchers(USER_RESOURCE).authenticated()
-                                .anyRequest().authenticated()
+                                .anyRequest()
+                                .authenticated()
                 )
-                // Configuración del login
-                .formLogin(form -> form
-                        .loginProcessingUrl(LOGIN_RESOURCE) // URL para procesar la solicitud de login
-                        .defaultSuccessUrl("/dashboard.html", true)
-                        .permitAll()  // Permitir acceso sin autenticación a la página de login
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout ->
+                        logout.logoutUrl("/auth/logout")
+                                .addLogoutHandler(this::logout)
+                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
-                // Configuración del logout
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                ).userDetailsService(userDetailsService());
+        ;
 
         return http.build();
     }
 
+    private void logout(
+            final HttpServletRequest request, final HttpServletResponse response,
+            final Authentication authentication
+    ) {
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new MyUserDetailsService(); // Tu implementación de UserDetailsService
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return;
+        }
+
+        final String jwt = authHeader.substring(7);
+        TokenDocument storedToken = tokenRepository.findByToken(jwt)
+                .orElse(null);
+        if (storedToken != null) {
+            storedToken.setExpired(true);
+            storedToken.setRevoked(true);
+            tokenRepository.save(storedToken);
+            SecurityContextHolder.clearContext();
+        }
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Utiliza BCrypt para codificar contraseñas
-    }
-
 }

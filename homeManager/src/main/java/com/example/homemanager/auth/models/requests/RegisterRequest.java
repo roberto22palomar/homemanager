@@ -1,4 +1,4 @@
-package com.example.homemanager.api.models.request;
+package com.example.homemanager.auth.models.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class UserRequest {
+public class RegisterRequest {
 
     private String username;
     private String password;

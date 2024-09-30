@@ -1,4 +1,4 @@
-package com.example.homemanager.api.models.request;
+package com.example.homemanager.auth.models.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

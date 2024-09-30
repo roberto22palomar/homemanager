@@ -50,6 +50,32 @@
 <script>
     // Función para cargar la navbar
 
+const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('access_token')
+
+fetch('/homemanager/dashboards.html', {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => {
+    if (response.ok) {
+        return response.text(); // O JSON si estás obteniendo datos de una API
+    } else {
+        throw new Error('Unauthorized');
+    }
+})
+.then(data => {
+    // Redirigir o mostrar el contenido de dashboards.html
+    document.write(data);
+})
+.catch(error => {
+    console.error('Error al acceder a dashboards:', error);
+    window.location.href = '/login.html'; // Redirigir al login si no tiene acceso
+});
+
+
     document.addEventListener('DOMContentLoaded', function() {
         fetch('navbar.html')
             .then(response => response.text())
@@ -58,6 +84,7 @@
             })
             .catch(error => console.error('Error loading navbar:', error));
     });
+
 </script>
 </body>
 </html>

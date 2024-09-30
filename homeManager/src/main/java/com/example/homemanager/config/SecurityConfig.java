@@ -29,19 +29,19 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final TokenRepository tokenRepository;
-    private static final String LOGIN_RESOURCE = "/login";
     private static final String[] USER_RESOURCE = {"/dashboard/**", "/casa/**", "/invitacion/**", "/tarea/**"};
+
+    private static final String[] PUBLIC_URLS = {"/auth/**", "/login.html", "/register.html"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/auth/**")
-                                .permitAll()
-                                .requestMatchers(USER_RESOURCE).authenticated()
-                                .anyRequest()
-                                .authenticated()
+                        req
+                                .requestMatchers(PUBLIC_URLS).permitAll() // Permitir acceso a las páginas HTML
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -50,8 +50,7 @@ public class SecurityConfig {
                         logout.logoutUrl("/auth/logout")
                                 .addLogoutHandler(this::logout)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                )
-        ;
+                );
 
         return http.build();
     }

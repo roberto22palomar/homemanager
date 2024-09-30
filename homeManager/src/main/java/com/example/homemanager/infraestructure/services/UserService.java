@@ -1,6 +1,6 @@
 package com.example.homemanager.infraestructure.services;
 
-import com.example.homemanager.api.models.request.LoginRequest;
+import com.example.homemanager.auth.models.requests.LoginRequest;
 import com.example.homemanager.api.models.responses.UserResponse;
 import com.example.homemanager.auth.models.requests.RegisterRequest;
 import com.example.homemanager.domain.documents.UserDocument;
@@ -75,10 +75,6 @@ public class UserService implements IUserService {
 // DE MOMENTO NO HAY DELETE DE USUARIOS
     }
 
-    @Override
-    public UserResponse checkLogin(LoginRequest request) {
-        return null;
-    }
 
 
 }

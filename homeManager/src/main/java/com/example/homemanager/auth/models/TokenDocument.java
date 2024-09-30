@@ -20,6 +20,6 @@ public class TokenDocument {
     private TokenType tokenType = TokenType.BEARER;
     private boolean revoked;
     private boolean expired;
-    private UserDocument user;
+    private String user;
 
 }

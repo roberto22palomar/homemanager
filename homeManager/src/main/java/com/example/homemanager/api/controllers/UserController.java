@@ -21,9 +21,4 @@ public class UserController {
         return ResponseEntity.ok(userService.create(request));
     }
 
-    @GetMapping
-    public ResponseEntity<Void> checkLogged() {
-        return ResponseEntity.noContent().build();
-    }
-
 }

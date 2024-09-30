@@ -1,7 +1,5 @@
 package com.example.homemanager.api.models.responses;
 
-import com.example.homemanager.utils.EstadoInvitacion;
-import com.example.homemanager.utils.InvitacionVigente;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class InvitacionResponse {
+public class MemberResponse {
 
     private String id;
+    private String username;
     private String email;
-    private String idCasa;
-    private EstadoInvitacion estado;
-    private InvitacionVigente vigente;
-
 
 }

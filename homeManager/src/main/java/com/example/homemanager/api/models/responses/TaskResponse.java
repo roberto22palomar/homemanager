@@ -1,7 +1,7 @@
 package com.example.homemanager.api.models.responses;
 
-import com.example.homemanager.utils.EstadoTarea;
-import com.example.homemanager.utils.Periodicidad;
+import com.example.homemanager.utils.TaskStatus;
+import com.example.homemanager.utils.Periodicity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,19 +14,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Builder
-public class TareaResponse {
+public class TaskResponse {
 
     private String id;
-    private String nombre;
-    private String descripcion;
+    private String name;
+    private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime fechaCreacion;
+    private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime fechaVencimiento;
-    private Periodicidad periodicidad;
-    private EstadoTarea estado;
-    private MiembroResponse usuarioAsignado;
-    private String idCasa;
-    private Integer puntos;
+    private LocalDateTime expirationDate;
+    private Periodicity periodicity;
+    private TaskStatus status;
+    private MemberResponse assignedMember;
+    private String houseId;
+    private Integer points;
 
 }

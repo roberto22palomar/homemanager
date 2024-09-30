@@ -1,10 +1,9 @@
 package com.example.homemanager.infraestructure.services;
 
-import com.example.homemanager.auth.models.requests.LoginRequest;
 import com.example.homemanager.api.models.responses.UserResponse;
 import com.example.homemanager.auth.models.requests.RegisterRequest;
 import com.example.homemanager.domain.documents.UserDocument;
-import com.example.homemanager.domain.repositories.CasaRepository;
+import com.example.homemanager.domain.repositories.HouseRepository;
 import com.example.homemanager.domain.repositories.UserRepository;
 import com.example.homemanager.infraestructure.abstract_services.IUserService;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ import java.util.HashSet;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final CasaRepository casaRepository;
+    private final HouseRepository houseRepository;
     private final PasswordEncoder passwordEncoder;
 
     private UserResponse entityToResponse(UserDocument entity) {
@@ -33,7 +32,7 @@ public class UserService implements IUserService {
 
         BeanUtils.copyProperties(entity, userResponse);
 
-        response.setCasas(entity.getCasas());
+        response.setHousesId(entity.getHousesId());
 
         return response;
 
@@ -46,13 +45,13 @@ public class UserService implements IUserService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .casas(new HashSet<>())
+                .housesId(new HashSet<>())
                 .build();
 
 
         var userPersisted = userRepository.save(userToPersist);
 
-        log.info("Usuario {} creado correctamente", userPersisted.getUsername());
+        log.info("User {} saved.", userPersisted.getUsername());
 
         return entityToResponse(userPersisted);
     }

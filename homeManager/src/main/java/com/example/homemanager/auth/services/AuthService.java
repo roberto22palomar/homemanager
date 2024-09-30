@@ -35,14 +35,14 @@ public class AuthService implements IAuthService {
     public TokenResponse register(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            log.info("Registro - Nombre de usuario ya está en uso: {}", request.getUsername());
-            throw new UserAlreadyExists("El nombre de usuario ya está en uso");
+            log.info("Register - Username already in use: {}", request.getUsername());
+            throw new UserAlreadyExists("Username already in use.");
         } else {
             UserDocument userToPersist = UserDocument.builder()
                     .username(request.getUsername())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .email(request.getEmail())
-                    .casas(new HashSet<>())
+                    .housesId(new HashSet<>())
                     .build();
 
             var userPersisted = userRepository.save(userToPersist);
@@ -50,7 +50,7 @@ public class AuthService implements IAuthService {
             var refreshToken = jwtService.generateRefreshToken(userPersisted);
             saveUserToken(userPersisted, jwtToken);
 
-            log.info("Usuario {} creado correctamente", userPersisted.getUsername());
+            log.info("User: {} created", userPersisted.getUsername());
 
             return new TokenResponse(jwtToken, refreshToken);
         }
@@ -82,7 +82,7 @@ public class AuthService implements IAuthService {
                 token.setExpired(true);
                 token.setRevoked(true);
             }
-            log.info("Tokens anteriores revocados del usuario: {}", user.getUsername());
+            log.info("Old tokens revoked for user: {}", user.getUsername());
             tokenRepository.saveAll(validUserTokens);
         }
     }
@@ -125,7 +125,7 @@ public class AuthService implements IAuthService {
                 .build();
 
         tokenRepository.save(token);
-        log.info("Nuevo token guardado para el usuario: {}", user.getUsername());
+        log.info("New token saved for user: {}", user.getUsername());
 
 
     }

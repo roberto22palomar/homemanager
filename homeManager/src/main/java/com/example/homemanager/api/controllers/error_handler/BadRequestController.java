@@ -5,8 +5,8 @@ package com.example.homemanager.api.controllers.error_handler;
 import com.example.homemanager.api.models.responses.error.BaseErrorResponse;
 import com.example.homemanager.api.models.responses.error.ErrorResponse;
 import com.example.homemanager.utils.exceptions.IdNotFoundException;
-import com.example.homemanager.utils.exceptions.InvitacionFinalizadaException;
-import com.example.homemanager.utils.exceptions.UserAlreadyAddedInCasa;
+import com.example.homemanager.utils.exceptions.RevokedInvitationException;
+import com.example.homemanager.utils.exceptions.UserAlreadyMember;
 import com.example.homemanager.utils.exceptions.UserAlreadyExists;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,8 +25,8 @@ public class BadRequestController {
                 .code(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
-    @ExceptionHandler(UserAlreadyAddedInCasa.class)
-    public BaseErrorResponse userAlreadyInCasa(UserAlreadyAddedInCasa exception) {
+    @ExceptionHandler(UserAlreadyMember.class)
+    public BaseErrorResponse userAlreadyMember(UserAlreadyMember exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())
@@ -43,8 +43,8 @@ public class BadRequestController {
                 .build();
     }
 
-    @ExceptionHandler(InvitacionFinalizadaException.class)
-    public BaseErrorResponse handleInvitacionFinalizada(InvitacionFinalizadaException exception) {
+    @ExceptionHandler(RevokedInvitationException.class)
+    public BaseErrorResponse revokedInvitationException(RevokedInvitationException exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())

@@ -11,10 +11,10 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder
-public class CasaRequest {
+public class HouseRequest {
 
-    private String nombre;
-    private Set<String> idMiembros;
-    private Set<String> idTareas;
+    private String name;
+    private Set<String> membersId;
+    private Set<String> tasksId;
 
 }

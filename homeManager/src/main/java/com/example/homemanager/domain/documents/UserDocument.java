@@ -20,6 +20,6 @@ public class UserDocument implements Serializable {
     private String username;
     private String password;
     private String email;
-    private Set<String> casas;
+    private Set<String> housesId;
 
 }

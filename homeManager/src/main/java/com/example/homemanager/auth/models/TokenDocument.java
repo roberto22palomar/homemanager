@@ -1,6 +1,5 @@
 package com.example.homemanager.auth.models;
 
-import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.utils.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

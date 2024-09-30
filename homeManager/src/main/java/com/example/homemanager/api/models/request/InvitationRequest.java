@@ -1,4 +1,4 @@
-package com.example.homemanager.api.models.responses;
+package com.example.homemanager.api.models.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class MiembroResponse {
+public class InvitationRequest {
 
-    private String id;
-    private String username;
     private String email;
+    private String idCasa;
+
 
 }

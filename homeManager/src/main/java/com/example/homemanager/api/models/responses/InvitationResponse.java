@@ -1,22 +1,22 @@
 package com.example.homemanager.api.models.responses;
 
-import com.example.homemanager.domain.documents.TareaDocument;
+import com.example.homemanager.utils.InvitationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class CasaResponse {
+public class InvitationResponse {
 
     private String id;
-    private String nombre;
-    private Set<MiembroResponse> miembros;
-    private Set<TareaDocument> tareas;
+    private String email;
+    private String houseId;
+    private InvitationStatus status;
+    private boolean revoked;
+
 
 }

@@ -1,7 +1,7 @@
 package com.example.homemanager.auth.services;
 
-import com.example.homemanager.api.models.request.LoginRequest;
 import com.example.homemanager.auth.models.TokenDocument;
+import com.example.homemanager.auth.models.requests.LoginRequest;
 import com.example.homemanager.auth.models.requests.RegisterRequest;
 import com.example.homemanager.auth.models.responses.TokenResponse;
 import com.example.homemanager.auth.repository.TokenRepository;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -60,6 +59,7 @@ public class AuthService implements IAuthService {
                         request.getPassword()
                 )
         );
+
         var user = userRepository.findByUsername(request.getUsername());
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -71,18 +71,20 @@ public class AuthService implements IAuthService {
     }
 
     public void revokeAllUserTokens(UserDocument user) {
-        List<TokenDocument> validUserTokens = tokenRepository.findAllValidTokensByUserId(user.getId());
+        List<TokenDocument> validUserTokens = tokenRepository.findAllValidTokensByUsername(user.getUsername());
         if (!validUserTokens.isEmpty()) {
             for (TokenDocument token : validUserTokens) {
                 token.setExpired(true);
                 token.setRevoked(true);
             }
+            log.info("Tokens anteriores revocados del usuario: {}", user.getUsername());
             tokenRepository.saveAll(validUserTokens);
         }
     }
 
     @Override
     public TokenResponse refresh(String authHeader) {
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Invalid Bearer token");
         }
@@ -110,7 +112,7 @@ public class AuthService implements IAuthService {
 
     private void saveUserToken(UserDocument user, String jwtToken) {
         var token = TokenDocument.builder()
-                .user(user)
+                .user(user.getUsername())
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
@@ -118,6 +120,8 @@ public class AuthService implements IAuthService {
                 .build();
 
         tokenRepository.save(token);
+        log.info("Nuevo token guardado para el usuario: {}", user.getUsername());
+
 
     }
 }

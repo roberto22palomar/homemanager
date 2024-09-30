@@ -8,6 +8,7 @@ import com.example.homemanager.auth.repository.TokenRepository;
 import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.UserRepository;
 import com.example.homemanager.utils.TokenType;
+import com.example.homemanager.utils.exceptions.UserAlreadyExists;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,22 +34,26 @@ public class AuthService implements IAuthService {
 
     public TokenResponse register(RegisterRequest request) {
 
-        UserDocument userToPersist = UserDocument.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .email(request.getEmail())
-                .casas(new HashSet<>())
-                .build();
+        if (userRepository.existsByUsername(request.getUsername())) {
+            log.info("Registro - Nombre de usuario ya está en uso: {}", request.getUsername());
+            throw new UserAlreadyExists("El nombre de usuario ya está en uso");
+        } else {
+            UserDocument userToPersist = UserDocument.builder()
+                    .username(request.getUsername())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .email(request.getEmail())
+                    .casas(new HashSet<>())
+                    .build();
 
+            var userPersisted = userRepository.save(userToPersist);
+            var jwtToken = jwtService.generateToken(userPersisted);
+            var refreshToken = jwtService.generateRefreshToken(userPersisted);
+            saveUserToken(userPersisted, jwtToken);
 
-        var userPersisted = userRepository.save(userToPersist);
-        var jwtToken = jwtService.generateToken(userPersisted);
-        var refreshToken = jwtService.generateRefreshToken(userPersisted);
-        saveUserToken(userPersisted, jwtToken);
+            log.info("Usuario {} creado correctamente", userPersisted.getUsername());
 
-        log.info("Usuario {} creado correctamente", userPersisted.getUsername());
-
-        return new TokenResponse(jwtToken, refreshToken);
+            return new TokenResponse(jwtToken, refreshToken);
+        }
     }
 
     public TokenResponse login(LoginRequest request) {

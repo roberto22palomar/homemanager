@@ -7,6 +7,7 @@ import com.example.homemanager.api.models.responses.error.ErrorResponse;
 import com.example.homemanager.utils.exceptions.IdNotFoundException;
 import com.example.homemanager.utils.exceptions.InvitacionFinalizadaException;
 import com.example.homemanager.utils.exceptions.UserAlreadyAddedInCasa;
+import com.example.homemanager.utils.exceptions.UserAlreadyExists;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,6 +17,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestController {
 
+    @ExceptionHandler(UserAlreadyExists.class)
+    public BaseErrorResponse userAlreadyExists(UserAlreadyExists exception) {
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .build();
+    }
     @ExceptionHandler(UserAlreadyAddedInCasa.class)
     public BaseErrorResponse userAlreadyInCasa(UserAlreadyAddedInCasa exception) {
         return ErrorResponse.builder()

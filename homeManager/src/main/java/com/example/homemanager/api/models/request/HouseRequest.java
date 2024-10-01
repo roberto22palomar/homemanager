@@ -14,6 +14,7 @@ import java.util.Set;
 public class HouseRequest {
 
     private String name;
+    private String creatorId;
     private Set<String> membersId;
     private Set<String> tasksId;
 

@@ -34,7 +34,7 @@ public class InvitationService implements IInvitationService {
     @Override
     public InvitationResponse create(InvitationRequest request) {
 
-        var house = houseRepository.findById(request.getIdCasa()).orElseThrow(() -> new IdNotFoundException("House not found."));
+        var house = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
         var user = userRepository.findByEmail(request.getEmail());
 
 
@@ -42,7 +42,7 @@ public class InvitationService implements IInvitationService {
 
             InvitationDocument invitationToPersist = InvitationDocument.builder()
                     .email(request.getEmail())
-                    .houseId(request.getIdCasa())
+                    .houseId(request.getHouseId())
                     .status(InvitationStatus.PENDING)
                     .revoked(false)
                     .build();
@@ -52,7 +52,7 @@ public class InvitationService implements IInvitationService {
             log.info("Invitation was sent to: {}.", invitationPersisted.getEmail());
             return entityToResponse(invitationPersisted);
         } else {
-            log.info("User {} is already member of house {}", user.getEmail(), request.getIdCasa());
+            log.info("User {} is already member of house {}", user.getEmail(), request.getHouseId());
             throw new UserAlreadyMember("The user is already a member of that house.");
         }
 

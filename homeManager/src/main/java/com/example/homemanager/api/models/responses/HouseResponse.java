@@ -16,6 +16,7 @@ public class HouseResponse {
 
     private String id;
     private String name;
+    private String creatorId;
     private Set<MemberResponse> members;
     private Set<TaskDocument> tasks;
 

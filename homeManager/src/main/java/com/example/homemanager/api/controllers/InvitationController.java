@@ -24,9 +24,9 @@ public class InvitationController {
         return ResponseEntity.ok(invitationService.create(request));
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping
     public ResponseEntity<InvitationResponse> updateStatus(
-            @PathVariable String id,
+            @RequestParam String id,
             @RequestParam("newStatus") InvitationStatus status) {
 
         return ResponseEntity.ok(invitationService.updateInvitationStatus(id, status));

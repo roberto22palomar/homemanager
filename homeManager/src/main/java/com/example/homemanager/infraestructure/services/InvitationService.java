@@ -14,6 +14,8 @@ import com.example.homemanager.utils.exceptions.UserAlreadyMember;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +37,16 @@ public class InvitationService implements IInvitationService {
     public InvitationResponse create(InvitationRequest request) {
 
         var house = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
-        var user = userRepository.findByEmail(request.getEmail());
+        var userInvited = userRepository.findByUsername(request.getInvitedUser());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userInviting = authentication.getName();
 
-        if (!house.getMembersId().contains(user.getId())) {
+        if (!house.getMembersId().contains(userInvited.getUsername())) {
 
             InvitationDocument invitationToPersist = InvitationDocument.builder()
-                    .email(request.getEmail())
+                    .invitedUser(userInvited.getUsername())
+                    .invitingUser(userInviting)
                     .houseId(request.getHouseId())
                     .status(InvitationStatus.PENDING)
                     .revoked(false)
@@ -49,10 +54,10 @@ public class InvitationService implements IInvitationService {
 
             InvitationDocument invitationPersisted = invitationRepository.save(invitationToPersist);
 
-            log.info("Invitation was sent to: {}.", invitationPersisted.getEmail());
+            log.info("Invitation was sent to user {} from user {} to house {}.", userInvited.getUsername(), userInviting, house.getName());
             return entityToResponse(invitationPersisted);
         } else {
-            log.info("User {} is already member of house {}", user.getEmail(), request.getHouseId());
+            log.info("User {} is already member of house {}", userInvited.getUsername(), request.getHouseId());
             throw new UserAlreadyMember("The user is already a member of that house.");
         }
 
@@ -74,12 +79,12 @@ public class InvitationService implements IInvitationService {
             if (status.equals(InvitationStatus.ACCEPTED)) {
 
                 var house = houseRepository.findById(invitationToUpdate.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
-                var user = userRepository.findByEmail(invitationToUpdate.getEmail());
+                var userInvited = userRepository.findByUsername(invitationToUpdate.getInvitedUser());
 
-                casaService.addMember(house.getId(), user.getId());
+                casaService.addMember(house.getId(), userInvited.getId());
 
                 invitationToUpdate.setRevoked(true);
-                log.info("Invitation accepted and finished -> Member: {} added to house {}", user.getId(), house.getId());
+                log.info("Invitation accepted and finished -> Member: {} added to house {}", userInvited.getId(), house.getId());
 
             } else if (status.equals(InvitationStatus.REJECTED)) {
                 invitationToUpdate.setRevoked(true);
@@ -96,12 +101,15 @@ public class InvitationService implements IInvitationService {
 
     }
 
-    public Set<InvitationResponse> getInvitations(String email) {
+    public Set<InvitationResponse> getInvitations() {
 
         Set<InvitationResponse> invitationsToResponse = new HashSet<>();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
         invitationRepository
-                .findByEmail(email)
+                .findByUsername(username)
                 .forEach(invitation -> invitationsToResponse.add(entityToResponse(invitation)));
 
         return invitationsToResponse;

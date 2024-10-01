@@ -32,10 +32,10 @@ public class InvitationController {
         return ResponseEntity.ok(invitationService.updateInvitationStatus(id, status));
     }
 
-    @GetMapping("/getInvitations/{email}")
-    public ResponseEntity<Set<InvitationResponse>> getInvitations(@PathVariable String email) {
+    @GetMapping("/getInvitations")
+    public ResponseEntity<Set<InvitationResponse>> getInvitations() {
 
-        return ResponseEntity.ok(invitationService.getInvitations(email));
+        return ResponseEntity.ok(invitationService.getInvitations());
     }
 
     @DeleteMapping("/{id}")

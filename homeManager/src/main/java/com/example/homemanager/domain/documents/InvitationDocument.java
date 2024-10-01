@@ -17,7 +17,8 @@ import java.io.Serializable;
 public class InvitationDocument implements Serializable {
 
     private String id;
-    private String email;
+    private String invitedUser;
+    private String invitingUser;
     private String houseId;
     private InvitationStatus status;
     private boolean revoked;

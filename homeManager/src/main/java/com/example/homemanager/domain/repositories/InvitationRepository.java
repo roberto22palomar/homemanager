@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.Set;
 
 public interface InvitationRepository extends MongoRepository<InvitationDocument, String> {
-    @Query("{ 'email': ?0 }")
-    Set<InvitationDocument> findByEmail(String email);
+    @Query("{ 'invitedUser': ?0 }")
+    Set<InvitationDocument> findByUsername(String username);
 }

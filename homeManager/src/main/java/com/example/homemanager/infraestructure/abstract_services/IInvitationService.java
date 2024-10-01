@@ -10,6 +10,6 @@ public interface IInvitationService extends CrudService<InvitationRequest, Invit
 
     InvitationResponse updateInvitationStatus(String id, InvitationStatus status);
 
-    Set<InvitationResponse> getInvitations(String email);
+    Set<InvitationResponse> getInvitations();
 
 }

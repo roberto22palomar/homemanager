@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InvitationRequest {
 
-    private String email;
+    private String invitedUser;
     private String houseId;
 
 

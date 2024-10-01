@@ -61,6 +61,8 @@ public class HouseService implements IHouseService {
     @Override
     public HouseResponse create(HouseRequest request) {
 
+        request.getMembersId().add(request.getCreatorId());
+
         HouseDocument houseToPersist = HouseDocument.builder()
                 .name(request.getName())
                 .creatorId(request.getCreatorId())

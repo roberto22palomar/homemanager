@@ -40,8 +40,6 @@ public class HouseService implements IHouseService {
     private HouseResponse entityToResponse(HouseDocument entity) {
         var response = new HouseResponse();
         BeanUtils.copyProperties(entity, response);
-        var casaResponse = new HouseResponse();
-        BeanUtils.copyProperties(entity, casaResponse);
 
         var users = new HashSet<>(userRepository.findAllById(entity.getMembersId()));
         Set<MemberResponse> members = new HashSet<>();
@@ -65,6 +63,7 @@ public class HouseService implements IHouseService {
 
         HouseDocument houseToPersist = HouseDocument.builder()
                 .name(request.getName())
+                .creatorId(request.getCreatorId())
                 .membersId(request.getMembersId())
                 .tasksId(request.getTasksId())
                 .points(new HashMap<>())

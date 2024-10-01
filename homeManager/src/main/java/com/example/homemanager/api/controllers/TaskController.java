@@ -22,9 +22,9 @@ public class TaskController {
         return ResponseEntity.ok(taskService.create(request));
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping
     public ResponseEntity<TaskResponse> updateStatus(
-            @PathVariable String id,
+            @RequestParam String id,
             @RequestParam("newStatus") TaskStatus status) {
 
         return ResponseEntity.ok(taskService.updateStatus(id, status));

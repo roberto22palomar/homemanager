@@ -114,7 +114,7 @@ public class TaskService implements ITaskService {
     public void delete(String id) {
 
         taskRepository.deleteById(id);
-
+        log.info("Task {} deleted.", id);
 
     }
 

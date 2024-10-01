@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class InvitationRequest {
 
     private String email;
-    private String idCasa;
+    private String houseId;
 
 
 }

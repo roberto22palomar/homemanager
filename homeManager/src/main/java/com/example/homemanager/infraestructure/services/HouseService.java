@@ -15,6 +15,8 @@ import com.example.homemanager.utils.exceptions.IdNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,11 +63,16 @@ public class HouseService implements IHouseService {
     @Override
     public HouseResponse create(HouseRequest request) {
 
-        request.getMembersId().add(request.getCreatorId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userCreator = authentication.getName();
+
+        var idUserCreator = userRepository.findByUsername(userCreator).getId();
+
+        request.getMembersId().add(idUserCreator);
 
         HouseDocument houseToPersist = HouseDocument.builder()
                 .name(request.getName())
-                .creatorId(request.getCreatorId())
+                .creatorId(idUserCreator)
                 .membersId(request.getMembersId())
                 .tasksId(request.getTasksId())
                 .points(new HashMap<>())

@@ -18,6 +18,8 @@ public class HouseController {
 
     private final IHouseService houseService;
 
+    //TODO ver que fomra es la mejor para que el usuario logeado pueda hacer consultas que correspondan, y que otro usuario logeado no acceda a recursos de otro aún estando logeado
+
     @PostMapping
     public ResponseEntity<HouseResponse> post(@Valid @RequestBody HouseRequest request) {
 

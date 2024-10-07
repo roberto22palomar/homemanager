@@ -4,6 +4,7 @@ import com.example.homemanager.api.models.request.HouseRequest;
 import com.example.homemanager.api.models.responses.HouseResponse;
 import com.example.homemanager.api.models.responses.MemberResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
+import com.example.homemanager.auth.aspects.CheckHouseAccess;
 import com.example.homemanager.domain.documents.HouseDocument;
 import com.example.homemanager.domain.documents.TaskDocument;
 import com.example.homemanager.domain.documents.UserDocument;
@@ -29,6 +30,7 @@ import java.util.Set;
 @Service
 @Slf4j
 @AllArgsConstructor
+@CheckHouseAccess
 public class HouseService implements IHouseService {
 
     private static final String HOUSE_NOT_FOUND = "House not found with that ID.";

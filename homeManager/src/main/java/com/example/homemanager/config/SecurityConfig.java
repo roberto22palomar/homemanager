@@ -31,7 +31,14 @@ public class SecurityConfig {
     private final TokenRepository tokenRepository;
     private static final String[] USER_RESOURCE = {"/dashboard/**", "/casa/**", "/invitacion/**", "/tarea/**"};
 
-    private static final String[] PUBLIC_URLS = {"/auth/**", "/login.html", "/register.html"};
+    private static final String[] PUBLIC_URLS = {
+            "/auth/**",
+            "/login.html",
+            "/register.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,7 +47,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req
-                                .requestMatchers(PUBLIC_URLS).permitAll() // Permitir acceso a las páginas HTML
+                                .requestMatchers(PUBLIC_URLS).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -56,7 +63,8 @@ public class SecurityConfig {
     }
 
     private void logout(
-            final HttpServletRequest request, final HttpServletResponse response,
+            final HttpServletRequest request,
+            final HttpServletResponse response,
             final Authentication authentication
     ) {
 

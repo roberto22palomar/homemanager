@@ -59,8 +59,22 @@ public class ShoppingItemService implements IShoppingItemService {
     }
 
     @Override
-    public ShoppingItemResponse update(ShoppingItemRequest request, String s) {
-        return null;
+    public ShoppingItemResponse update(ShoppingItemRequest request, String id) {
+
+
+        var shoppingItemToUpdate = ShoppingItemDocument.builder()
+                .id(id)
+                .itemName(request.getItemName())
+                .houseId(request.getHouseId())
+                .quantity(request.getQuantity())
+                .purchased(request.isPurchased())
+                .build();
+
+        var shoppingItemUpdated = shoppingItemRepository.save(shoppingItemToUpdate);
+
+        return entityToResponse(shoppingItemUpdated);
+
+
     }
 
     @Override

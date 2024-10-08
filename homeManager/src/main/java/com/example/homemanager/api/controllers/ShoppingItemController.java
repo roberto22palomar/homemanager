@@ -28,26 +28,4 @@ public class ShoppingItemController {
         return ResponseEntity.ok(shoppingItemService.update(request, id));
     }
 
-   /* @PutMapping
-    public ResponseEntity<InvitationResponse> updateStatus(
-            @RequestParam String id,
-            @RequestParam("newStatus") InvitationStatus status) {
-
-        return ResponseEntity.ok(invitationService.updateInvitationStatus(id, status));
-    }
-
-    @GetMapping("/getInvitations")
-    public ResponseEntity<Set<InvitationResponse>> getInvitations() {
-
-        return ResponseEntity.ok(invitationService.getInvitations());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvitation(
-            @PathVariable String id) {
-        invitationService.delete(id);
-        return ResponseEntity.noContent().build();
-    }*/
-
-
 }

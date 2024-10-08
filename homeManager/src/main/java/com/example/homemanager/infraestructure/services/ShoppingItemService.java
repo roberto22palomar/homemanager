@@ -77,7 +77,9 @@ public class ShoppingItemService implements IShoppingItemService {
     }
 
     @Override
-    public void delete(String s) {
+    public void delete(String id) {
+
+        shoppingItemRepository.deleteById(id);
 
     }
 }

@@ -1,12 +1,12 @@
 package com.example.homemanager.infraestructure.abstract_services;
 
-public interface CrudService<RQ, RS, ID> {
+public interface CrudService<Request, Response, Id> {
 
-    RS create(RQ request);
+    Response create(Request request);
 
-    RS read(ID id);
+    Response read(Id id);
 
-    RS update(RQ request, ID id);
+    Response update(Request request, Id id);
 
-    void delete(ID id);
+    void delete(Id id);
 }

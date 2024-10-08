@@ -1,13 +1,9 @@
 package com.example.homemanager.api.controllers.error_handler;
 
 
-
 import com.example.homemanager.api.models.responses.error.BaseErrorResponse;
 import com.example.homemanager.api.models.responses.error.ErrorResponse;
-import com.example.homemanager.utils.exceptions.IdNotFoundException;
-import com.example.homemanager.utils.exceptions.RevokedInvitationException;
-import com.example.homemanager.utils.exceptions.UserAlreadyMember;
-import com.example.homemanager.utils.exceptions.UserAlreadyExists;
+import com.example.homemanager.utils.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,6 +21,7 @@ public class BadRequestController {
                 .code(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
+
     @ExceptionHandler(UserAlreadyMember.class)
     public BaseErrorResponse userAlreadyMember(UserAlreadyMember exception) {
         return ErrorResponse.builder()
@@ -45,6 +42,15 @@ public class BadRequestController {
 
     @ExceptionHandler(RevokedInvitationException.class)
     public BaseErrorResponse revokedInvitationException(RevokedInvitationException exception) {
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .build();
+    }
+
+    @ExceptionHandler(UserNotMemberOfHouse.class)
+    public BaseErrorResponse userNotMemberOfHouse(UserNotMemberOfHouse exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())

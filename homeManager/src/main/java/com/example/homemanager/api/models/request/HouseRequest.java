@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -14,7 +12,6 @@ import java.util.Set;
 public class HouseRequest {
 
     private String name;
-    private Set<String> membersId;
-    private Set<String> tasksId;
+    private String address;
 
 }

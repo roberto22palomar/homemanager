@@ -70,13 +70,19 @@ public class HouseService implements IHouseService {
 
         var idUserCreator = userRepository.findByUsername(userCreator).getId();
 
-        request.getMembersId().add(idUserCreator);
+        var membersId = new HashSet<String>();
+        var tasksId = new HashSet<String>();
+        var shoppingItemsId = new HashSet<String>();
+
+        membersId.add(idUserCreator);
+
 
         HouseDocument houseToPersist = HouseDocument.builder()
                 .name(request.getName())
                 .creatorId(idUserCreator)
-                .membersId(request.getMembersId())
-                .tasksId(request.getTasksId())
+                .membersId(membersId)
+                .tasksId(tasksId)
+                .shoppingItemsId(shoppingItemsId)
                 .points(new HashMap<>())
                 .build();
 
@@ -130,6 +136,7 @@ public class HouseService implements IHouseService {
     public HouseResponse update(HouseRequest request, String s) {
         return null;
     }
+
 
     @Override
     public void delete(String id) {

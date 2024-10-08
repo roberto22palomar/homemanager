@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ShoppingItemRequest {
 
+    private String houseId;
     private String itemName;
     private int quantity;
 

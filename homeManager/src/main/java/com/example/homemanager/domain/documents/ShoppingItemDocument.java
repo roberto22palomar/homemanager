@@ -15,6 +15,8 @@ import java.io.Serializable;
 @Document(value = "shoppingItems")
 public class ShoppingItemDocument implements Serializable {
 
+    private String id;
+    private String houseId;
     private String itemName;
     private int quantity;
     private boolean purchased;

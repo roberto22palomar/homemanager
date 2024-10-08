@@ -117,13 +117,10 @@ public class HouseService implements IHouseService {
 
         var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
 
-        Set<ShoppingItemResponse> shoppingItems = shoppingItemRepository.findAllById(casa.getShoppingItemsId())
+        return shoppingItemRepository.findAllById(casa.getShoppingItemsId())
                 .stream()
                 .map(this::entityShoppingItemToResponse)
                 .collect(Collectors.toSet());
-
-        return shoppingItems;
-
     }
 
     public HouseResponse addMember(String houseId, String idUser) {

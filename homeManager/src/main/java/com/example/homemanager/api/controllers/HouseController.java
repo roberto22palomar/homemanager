@@ -4,6 +4,7 @@ import com.example.homemanager.api.models.request.HouseRequest;
 import com.example.homemanager.api.models.responses.HouseResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
 import com.example.homemanager.infraestructure.abstract_services.IHouseService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,10 @@ import java.util.Set;
 @RestController
 @RequestMapping(path = "house")
 @AllArgsConstructor
+@Tag(name="House Management", description = "Operations related to house management")
 public class HouseController {
 
     private final IHouseService houseService;
-
-    //TODO ver que fomra es la mejor para que el usuario logeado pueda hacer consultas que correspondan, y que otro usuario logeado no acceda a recursos de otro aún estando logeado
 
     @PostMapping
     public ResponseEntity<HouseResponse> post(@Valid @RequestBody HouseRequest request) {

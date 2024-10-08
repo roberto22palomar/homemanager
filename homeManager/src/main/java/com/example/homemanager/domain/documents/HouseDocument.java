@@ -22,6 +22,7 @@ public class HouseDocument implements Serializable {
     private String creatorId;
     private Set<String> membersId;
     private Set<String> tasksId;
+    private Set<String> shoppingItemsId;
     private Map<String,Integer> points;
 
 

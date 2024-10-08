@@ -3,6 +3,7 @@ package com.example.homemanager.infraestructure.services;
 import com.example.homemanager.api.models.request.TaskRequest;
 import com.example.homemanager.api.models.responses.MemberResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
+import com.example.homemanager.auth.aspects.CheckHouseAccess;
 import com.example.homemanager.domain.documents.TaskDocument;
 import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @Service
 @Slf4j
 @AllArgsConstructor
+@CheckHouseAccess
 public class TaskService implements ITaskService {
 
     private final TaskRepository taskRepository;
@@ -77,23 +79,18 @@ public class TaskService implements ITaskService {
                 log.info("Points added for task {} to user {}.", taskToUpdate.getName(), taskToUpdate.getAssignedUserId());
             }
 
-            // Verificar si la tarea estaba en estado "FINALIZADA" y se está cambiando a otro estado
         } else if (taskToUpdate.getStatus().equals(TaskStatus.COMPLETED) && taskToUpdate.isAssignedPoints()) {
 
-            // Si los puntos ya fueron asignados, restarlos al cambiar de estado
             house.getPoints().merge(taskToUpdate.getAssignedUserId(), -taskToUpdate.getPoints(), Integer::sum);
-            taskToUpdate.setAssignedPoints(false);  // Marcar que los puntos fueron removidos
+            taskToUpdate.setAssignedPoints(false);
             log.info("Points removed for task {} to user {}.", taskToUpdate.getName(), taskToUpdate.getAssignedUserId());
         }
 
-        // Guardar la casa actualizada
         houseRepository.save(house);
 
-        // Actualizar el estado de la tarea
         taskToUpdate.setStatus(status);
         taskRepository.save(taskToUpdate);
 
-        // Retornar la tarea actualizada como respuesta
         return entityToResponse(taskToUpdate);
     }
 

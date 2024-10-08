@@ -2,6 +2,7 @@ package com.example.homemanager.api.controllers;
 
 import com.example.homemanager.api.models.request.HouseRequest;
 import com.example.homemanager.api.models.responses.HouseResponse;
+import com.example.homemanager.api.models.responses.ShoppingItemResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
 import com.example.homemanager.infraestructure.abstract_services.IHouseService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +16,7 @@ import java.util.Set;
 @RestController
 @RequestMapping(path = "house")
 @AllArgsConstructor
-@Tag(name="House Management", description = "Operations related to house management")
+@Tag(name = "House Management", description = "Operations related to house management")
 public class HouseController {
 
     private final IHouseService houseService;
@@ -32,6 +33,12 @@ public class HouseController {
         return ResponseEntity.ok(houseService.getHouseTasks(id));
     }
 
+    @GetMapping("/getShoppingItems/{id}")
+    public ResponseEntity<Set<ShoppingItemResponse>> getHouseShoppingItems(@PathVariable String id) {
+
+        return ResponseEntity.ok(houseService.getHouseShoppingItems(id));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<HouseResponse> getHouse(@PathVariable String id) {
 
@@ -43,7 +50,7 @@ public class HouseController {
             @PathVariable String id,
             @RequestParam("userId") String userId) {
 
-        return ResponseEntity.ok(houseService.addMember(id,userId));
+        return ResponseEntity.ok(houseService.addMember(id, userId));
     }
 
     @DeleteMapping("{id}")

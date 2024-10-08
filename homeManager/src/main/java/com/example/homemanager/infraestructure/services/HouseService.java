@@ -3,12 +3,15 @@ package com.example.homemanager.infraestructure.services;
 import com.example.homemanager.api.models.request.HouseRequest;
 import com.example.homemanager.api.models.responses.HouseResponse;
 import com.example.homemanager.api.models.responses.MemberResponse;
+import com.example.homemanager.api.models.responses.ShoppingItemResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
 import com.example.homemanager.auth.aspects.CheckHouseAccess;
 import com.example.homemanager.domain.documents.HouseDocument;
+import com.example.homemanager.domain.documents.ShoppingItemDocument;
 import com.example.homemanager.domain.documents.TaskDocument;
 import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
+import com.example.homemanager.domain.repositories.ShoppingItemRepository;
 import com.example.homemanager.domain.repositories.TaskRepository;
 import com.example.homemanager.domain.repositories.UserRepository;
 import com.example.homemanager.infraestructure.abstract_services.IHouseService;
@@ -25,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -39,6 +43,7 @@ public class HouseService implements IHouseService {
     private final HouseRepository houseRepository;
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
+    private final ShoppingItemRepository shoppingItemRepository;
 
 
     private HouseResponse entityToResponse(HouseDocument entity) {
@@ -98,14 +103,26 @@ public class HouseService implements IHouseService {
         var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
 
         List<TaskDocument> tasks = taskRepository.findAllById(casa.getTasksId());
-        Set<TaskResponse> tasksResponse = new HashSet<>();
 
+        Set<TaskResponse> tasksResponse = new HashSet<>();
         tasks.forEach(task -> tasksResponse.add(entityTaskToResponse(task)));
 
         log.info("Tasks consultation of house: {}", id);
 
         return tasksResponse;
 
+    }
+
+    public Set<ShoppingItemResponse> getHouseShoppingItems(String id) {
+
+        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
+
+        Set<ShoppingItemResponse> shoppingItems = shoppingItemRepository.findAllById(casa.getShoppingItemsId())
+                .stream()
+                .map(this::entityShoppingItemToResponse)
+                .collect(Collectors.toSet());
+
+        return shoppingItems;
 
     }
 
@@ -156,6 +173,12 @@ public class HouseService implements IHouseService {
         response.setAssignedMember(entityUserToMemberResponse(userRepository.findById(entity.getAssignedUserId()).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND))));
         return response;
 
+    }
+
+    private ShoppingItemResponse entityShoppingItemToResponse(ShoppingItemDocument entity) {
+        var response = new ShoppingItemResponse();
+        BeanUtils.copyProperties(entity, response);
+        return response;
     }
 
 }

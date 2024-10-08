@@ -61,7 +61,6 @@ public class ShoppingItemService implements IShoppingItemService {
     @Override
     public ShoppingItemResponse update(ShoppingItemRequest request, String id) {
 
-
         var shoppingItemToUpdate = ShoppingItemDocument.builder()
                 .id(id)
                 .itemName(request.getItemName())

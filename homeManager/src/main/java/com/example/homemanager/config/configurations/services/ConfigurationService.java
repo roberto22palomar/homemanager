@@ -1,14 +1,12 @@
 package com.example.homemanager.config.configurations.services;
 
-import com.example.homemanager.config.configurations.repositories.ConfigurationRepository;
 import com.example.homemanager.config.configurations.models.Configuration;
-import com.example.homemanager.utils.exceptions.IdNotFoundException;
+import com.example.homemanager.config.configurations.repositories.ConfigurationRepository;
+import com.example.homemanager.utils.exceptions.ConfigurationReadingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -27,7 +25,7 @@ public class ConfigurationService {
                 T configValue = objectMapper.readValue(jsonValue, valueType);
                 return Optional.of(configValue);
             } catch (JsonProcessingException e) {
-                throw new RuntimeException("Error deserialization configurationn", e);
+                throw new ConfigurationReadingException("Error deserialization configuration");
             }
         }
         return Optional.empty();

@@ -1,2 +1,9 @@
-package com.example.homemanager.config.models;public class ShoppingItemCleanupConfig {
+package com.example.homemanager.config.configurations.models;
+
+import lombok.Data;
+
+@Data
+public class ShoppingItemCleanupConfig {
+    private int daysToKeepPurchased;
+    private String cronExpression;
 }

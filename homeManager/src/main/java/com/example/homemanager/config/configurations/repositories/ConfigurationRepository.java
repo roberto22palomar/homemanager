@@ -1,9 +1,7 @@
-package com.example.homemanager.domain.repositories;
+package com.example.homemanager.config.configurations.repositories;
 
-import com.example.homemanager.domain.documents.Configuration;
-import com.example.homemanager.domain.documents.UserDocument;
+import com.example.homemanager.config.configurations.models.Configuration;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import java.util.Optional;
 

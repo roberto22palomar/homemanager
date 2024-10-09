@@ -85,6 +85,7 @@ public class HouseService implements IHouseService {
         HouseDocument houseToPersist = HouseDocument.builder()
                 .name(request.getName())
                 .creatorId(idUserCreator)
+                .address(request.getAddress())
                 .membersId(membersId)
                 .tasksId(tasksId)
                 .shoppingItemsId(shoppingItemsId)
@@ -92,6 +93,10 @@ public class HouseService implements IHouseService {
                 .build();
 
         var housePersisted = houseRepository.save(houseToPersist);
+
+        var userToUpdate = userRepository.findById(idUserCreator).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND));
+        userToUpdate.getHousesId().add(housePersisted.getId());
+        userRepository.save(userToUpdate);
 
         log.info("House {} saved.", housePersisted.getName());
 
@@ -122,21 +127,6 @@ public class HouseService implements IHouseService {
                 .map(this::entityShoppingItemToResponse)
                 .collect(Collectors.toSet());
     }
-
-    public HouseResponse addMember(String houseId, String idUser) {
-
-        var houseToUpdate = houseRepository.findById(houseId).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
-        var user = userRepository.findById(idUser).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND));
-
-        houseToUpdate.getMembersId().add(user.getId());
-
-        houseToUpdate.getPoints().put(user.getId(), 0);
-
-        var houseUpdated = houseRepository.save(houseToUpdate);
-
-        return entityToResponse(houseUpdated);
-    }
-
 
     @Override
     public HouseResponse read(String id) {

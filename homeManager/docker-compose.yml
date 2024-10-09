@@ -1,20 +1,18 @@
 version: '3.8'
-
 services:
-  fpm:
-    build:
-      context: .
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-  db:
-    image: mongo:6.0
-    container_name: homemanager
+  mongo:
+    image: mongo:latest
+    container_name: mongo-docker
     restart: always
-    volumes:
-      - ./db/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
     environment:
-      - MONGO_INITDB_DATABASE=homemanager
-      - MONGO_INITDB_ROOT_USERNAME=rober
-      - MONGO_INITDB_ROOT_PASSWORD=rober
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-      - "27017:27017"
+      - 27018:27018
+    volumes:
+      - mongo_data:/data/db
+      - ./backup:/docker-entrypoint-initdb.d/backup # Volumen para respaldos o datos pre-cargados (opcional)
+
+volumes:
+  mongo_data:
+    driver: local

@@ -21,3 +21,7 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
+    config:
+      init:
+        enableAuthentication: true  # Esto habilita la autenticación en la UI de Swagger
+

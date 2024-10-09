@@ -12,5 +12,4 @@ public interface IHouseService extends CrudService<HouseRequest, HouseResponse, 
 
     Set<ShoppingItemResponse> getHouseShoppingItems(String id);
 
-    HouseResponse addMember(String idCasa, String idUser);
 }

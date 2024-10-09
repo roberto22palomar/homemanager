@@ -5,6 +5,8 @@ import com.example.homemanager.api.models.responses.HouseResponse;
 import com.example.homemanager.api.models.responses.ShoppingItemResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
 import com.example.homemanager.infraestructure.abstract_services.IHouseService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,40 +23,47 @@ public class HouseController {
 
     private final IHouseService houseService;
 
+    @Operation(summary = "Crea una nueva casa.", description = "Retorna datos de la casa creada.")
     @PostMapping
-    public ResponseEntity<HouseResponse> post(@Valid @RequestBody HouseRequest request) {
+    public ResponseEntity<HouseResponse> post(
+            @Valid
+            @RequestBody HouseRequest request) {
 
         return ResponseEntity.ok(houseService.create(request));
     }
 
+    @Operation(summary = "Consulta las tareas de la casa.", description = "Retorna las tareas asignadas a la casa consultada.")
     @GetMapping("/getTasks/{id}")
-    public ResponseEntity<Set<TaskResponse>> getHouseTasks(@PathVariable String id) {
+    public ResponseEntity<Set<TaskResponse>> getHouseTasks(
+            @Parameter(description = "Id de la casa.", required = true)
+            @PathVariable String id) {
 
         return ResponseEntity.ok(houseService.getHouseTasks(id));
     }
 
+    @Operation(summary = "Consulta los productos de la lista de la compra de la casa.", description = "Retorna los items a comprar de la casa consultada.")
     @GetMapping("/getShoppingItems/{id}")
-    public ResponseEntity<Set<ShoppingItemResponse>> getHouseShoppingItems(@PathVariable String id) {
+    public ResponseEntity<Set<ShoppingItemResponse>> getHouseShoppingItems(
+            @Parameter(description = "Id de la casa.", required = true)
+            @PathVariable String id) {
 
         return ResponseEntity.ok(houseService.getHouseShoppingItems(id));
     }
 
+    @Operation(summary = "Consulta información de la casa.", description = "Retorna información de la casa consultada.")
     @GetMapping("/{id}")
-    public ResponseEntity<HouseResponse> getHouse(@PathVariable String id) {
+    public ResponseEntity<HouseResponse> getHouse(
+            @Parameter(description = "Id de la casa.", required = true)
+            @PathVariable String id) {
 
         return ResponseEntity.ok(houseService.read(id));
     }
 
-    @PutMapping("/addMember/{id}")
-    public ResponseEntity<HouseResponse> addMember(
-            @PathVariable String id,
-            @RequestParam("userId") String userId) {
-
-        return ResponseEntity.ok(houseService.addMember(id, userId));
-    }
-
     @DeleteMapping("{id}")
+    @Operation(summary = "Borra la casa.", description = "Borra la casa indicada.")
+
     public ResponseEntity<Void> deleteHouse(
+            @Parameter(description = "Id de la casa.", required = true)
             @PathVariable String id) {
         houseService.delete(id);
         return ResponseEntity.noContent().build();

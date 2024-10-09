@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class ShoppingItemDocument implements Serializable {
     private String itemName;
     private int quantity;
     private boolean purchased;
+    private Date purchaseDate;
 
 
 }

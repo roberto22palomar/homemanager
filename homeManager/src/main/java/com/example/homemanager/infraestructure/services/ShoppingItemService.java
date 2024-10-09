@@ -77,7 +77,7 @@ public class ShoppingItemService implements IShoppingItemService {
                 .build();
 
         if (request.isPurchased()) {
-            shoppingItemToUpdate.setPurchaseDate(Date.from(Instant.now())); // Almacena la fecha y hora actual
+            shoppingItemToUpdate.setPurchaseDate(Date.from(Instant.now()));
         }
 
         var shoppingItemUpdated = shoppingItemRepository.save(shoppingItemToUpdate);

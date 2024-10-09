@@ -109,7 +109,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public void delete(String id) {
-
+//TODO BORRAR TAMBIEN LA REFERENCIA DE CASA.
         taskRepository.deleteById(id);
         log.info("Task {} deleted.", id);
 

@@ -14,6 +14,6 @@ public class ShoppingItemRequest {
     private String houseId;
     private String itemName;
     private int quantity;
-    private boolean purchased;
+    private boolean purchased = false;
 
 }

@@ -109,7 +109,14 @@ public class TaskService implements ITaskService {
 
     @Override
     public void delete(String id) {
-//TODO BORRAR TAMBIEN LA REFERENCIA DE CASA.
+
+        var task = taskRepository.findById(id).orElseThrow(()-> new IdNotFoundException(TASK_NOT_FOUND));
+        var house = houseRepository.findById(task.getHouseId()).orElseThrow(()-> new IdNotFoundException(HOUSE_NOT_FOUND));
+
+        //Quitar referencia de la tarea en la casa
+        house.getTasksId().remove(task.getId());
+        houseRepository.save(house);
+
         taskRepository.deleteById(id);
         log.info("Task {} deleted.", id);
 

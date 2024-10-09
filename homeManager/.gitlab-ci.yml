@@ -1,0 +1,13 @@
+image: openjdk:17
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - chmod +x ./mvnx
+    - ./mvnw package
+  artifacts:
+    paths:
+      - target/demo-0.0.1-SNAPSHOT.jar

@@ -1,4 +1,4 @@
-package com.example.homemanager.config;
+package com.example.homemanager.auth.config;
 
 import com.example.homemanager.auth.repository.TokenRepository;
 import com.example.homemanager.auth.services.JwtService;

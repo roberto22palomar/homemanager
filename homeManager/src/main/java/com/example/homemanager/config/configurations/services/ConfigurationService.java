@@ -1,31 +1,35 @@
-package com.example.homemanager.infraestructure.services;
+package com.example.homemanager.config.configurations.services;
 
-import com.example.homemanager.domain.documents.Configuration;
-import com.example.homemanager.domain.repositories.ConfigurationRepository;
+import com.example.homemanager.config.configurations.repositories.ConfigurationRepository;
+import com.example.homemanager.config.configurations.models.Configuration;
 import com.example.homemanager.utils.exceptions.IdNotFoundException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Transactional
 @Service
-@Slf4j
+@AllArgsConstructor
 public class ConfigurationService {
 
     private ConfigurationRepository configurationRepository;
-    private ObjectMapper objectMapper;
+    private  ObjectMapper objectMapper;
 
-
-    public <T> T getConfiguration(String key, Class<T> clazz) throws Exception {
-        Optional<Configuration> configOpt = configurationRepository.findByKey(key);
-
-        if (configOpt.isPresent()) {
-            String value = configOpt.get().getValue();
-            return objectMapper.readValue(value, clazz);
+    public <T> Optional<T> getConfiguration(String key, Class<T> valueType) {
+        Optional<Configuration> configDoc = configurationRepository.findByKey(key);
+        if (configDoc.isPresent()) {
+            String jsonValue = configDoc.get().getValue();
+            try {
+                T configValue = objectMapper.readValue(jsonValue, valueType);
+                return Optional.of(configValue);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Error deserialization configurationn", e);
+            }
         }
-        throw new IdNotFoundException("Configuration not found for key: " + key);
+        return Optional.empty();
     }
 }

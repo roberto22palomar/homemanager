@@ -1,4 +1,4 @@
-package com.example.homemanager.domain.documents;
+package com.example.homemanager.config.configurations.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +19,7 @@ public class Configuration implements Serializable {
     @Id
     private String id;
     private String key;
+    private String description;
     private String value;
 
 }

@@ -1,93 +1,155 @@
-# HomeManagerSpring
 
+# **HomeManager - Backend**
 
+## **Descripción del Proyecto**
+Una breve descripción sobre el propósito del proyecto.
 
-## Getting started
+> **HomeManager** es una aplicación para gestionar las tareas, compras y más en una casa compartida. Proporciona un sistema de autenticación con JWT para asegurar las peticiones, y permite a los usuarios gestionar casas, tareas y listas de compras de manera colaborativa, también se dispone de un sistema de puntos para obtener recompensas dentro de la misma casa.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## **Tabla de Contenidos**
+1. [Características](#características)
+2. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+3. [Requisitos Previos](#requisitos-previos)
+4. [Configuración del Proyecto](#configuración-del-proyecto)
+5. [Estructura del Proyecto](#estructura-del-proyecto)
+6. [Autenticación y Seguridad](#autenticación-y-seguridad)
+7. [Pruebas](#pruebas)
+8. [Swagger](#swagger)
+9. [Contribuciones](#contribuciones)
+10. [Licencia](#licencia)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## **Características**
+- Autenticación basada en JWT.
+- Gestión de roles de usuarios (Admin, User).
+- CRUD de usuarios, tareas, invitaciones, lista de la compra y casas.
+- Asignación de tareas y compras a los miembros de una casa.
+- Token de refresco para manejo de sesiones seguras.
+- API documentada con Swagger.
 
-## Add your files
+## **Tecnologías Utilizadas**
+- **Backend**: Java 17, Spring Boot, Spring Security.
+- **Base de Datos**: MongoDB.
+- **Autenticación**: JWT (JSON Web Token).
+- **Documentación API**: Swagger + OpenAPI.
+- **Manejo de Dependencias**: Maven.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## **Requisitos Previos**
+Antes de configurar y ejecutar el proyecto, asegúrate de tener instalado lo siguiente:
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/roberto22palomar/homemanagerspring.git
-git branch -M main
-git push -uf origin main
-```
+- **Java 17 o superior**: [Descargar Java](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html)
+- **Maven**: [Descargar Maven](https://maven.apache.org/download.cgi)
+- **MongoDB**: [Descargar MongoDB](https://www.mongodb.com/try/download/community)
 
-## Integrate with your tools
+## **Configuración del Proyecto**
 
-- [ ] [Set up project integrations](https://gitlab.com/roberto22palomar/homemanagerspring/-/settings/integrations)
+### **Clonar el Repositorio**
 
-## Collaborate with your team
+\`\`\`bash
+git clone https://github.com/usuario/homemanager.git
+cd homemanager
+\`\`\`
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### **Configuración del Entorno**
 
-## Test and Deploy
+1. Configura las variables de entorno para la conexión con MongoDB y otros parámetros en un archivo \`application.properties\` o \`application.yml\` dentro de la carpeta \`src/main/resources/\`.
 
-Use the built-in continuous integration in GitLab.
+**application.properties**:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+\`\`\`properties
+# Configuración de MongoDB
+spring.data.mongodb.uri=mongodb://localhost:27017/homemanager
 
-***
+# Configuración de JWT
+jwt.secret-key=tu-secreto
+jwt.expiration=3600000
+jwt.refresh-expiration=86400000
+\`\`\`
 
-# Editing this README
+2. Asegúrate de tener MongoDB corriendo en el puerto correcto (por defecto \`27017\`).
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### **Compilar y Ejecutar**
 
-## Suggestions for a good README
+Compila y ejecuta la aplicación localmente:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+\`\`\`bash
+mvn clean install
+mvn spring-boot:run
+\`\`\`
 
-## Name
-Choose a self-explaining name for your project.
+La aplicación estará disponible en: \`http://localhost:8080\`
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## **Estructura del Proyecto**
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Una descripción de los principales paquetes y clases del proyecto.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+\`\`\`
+src/
+├── main/
+│   ├── java/
+│   │   └── com/example/homemanager/
+│   │       ├── auth/              # Módulo de autenticación y seguridad
+│   │       ├── config/            # Configuración del proyecto (Seguridad, Base de datos, Swagger)
+│   │       ├── domain/            # Modelos y Repositorios de MongoDB
+│   │       ├── services/          # Lógica de negocio
+│   │       ├── controllers/       # Controladores REST
+│   └── resources/
+│       └── application.properties # Configuración del proyecto
+└── test/
+    └── java/                      # Pruebas unitarias y de integración
+\`\`\`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### **Descripción de Paquetes**
+- \`auth/\`: Maneja el flujo de autenticación (login, registro, JWT).
+- \`config/\`: Contiene configuraciones como seguridad, JWT y Swagger.
+- \`domain/\`: Modelos de MongoDB y repositorios.
+- \`services/\`: Servicios de negocio que implementan la lógica central de la aplicación.
+- \`controllers/\`: Endpoints de las APIs.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## **Autenticación y Seguridad**
+Este proyecto utiliza **JWT (JSON Web Token)** para autenticar y autorizar usuarios. A continuación, te explicamos cómo funciona el sistema de autenticación.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### **Registro y Login**
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+1. **Registro (\`/auth/register\`)**: Un usuario puede registrarse con un nombre de usuario, contraseña y correo electrónico.
+2. **Login (\`/auth/login\`)**: Después de la autenticación, se emite un JWT que debe incluirse en cada solicitud en el header \`Authorization: Bearer <token>\`.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### **Protección de Rutas**
+Las rutas están protegidas según el rol del usuario:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+- **Usuarios normales** pueden acceder a las rutas bajo \`/dashboard/**\`.
+- **Admin** tiene acceso a rutas específicas como \`/admin/**\`.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## **Pruebas**
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Este proyecto incluye pruebas unitarias y de integración usando **JUnit** y **Mockito**.
 
-## License
-For open source projects, say how it is licensed.
+### **Ejecutar Pruebas**
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+\`\`\`bash
+mvn test
+\`\`\`
+
+### **Cobertura de Pruebas**
+Explicar qué partes de la aplicación están cubiertas por pruebas, como el servicio de autenticación, controladores, etc.
+
+## **Swagger**
+
+La API está documentada con Swagger. Una vez que la aplicación esté corriendo, puedes acceder a la documentación interactiva en:
+
+\`\`\`
+http://localhost:8080/swagger-ui/index.html
+\`\`\`
+
+Puedes usar Swagger para probar los endpoints directamente desde el navegador.
+
+## **Contribuciones**
+Si deseas contribuir al proyecto:
+
+1. Crea un fork del repositorio.
+2. Crea una nueva rama con tu feature o fix (\`git checkout -b feature/nueva-feature\`).
+3. Haz commit de tus cambios (\`git commit -m 'Agrega nueva feature'\`).
+4. Haz push a la rama (\`git push origin feature/nueva-feature\`).
+5. Crea un Pull Request.
+
+## **Licencia**
+Este proyecto está licenciado bajo la Licencia MIT - consulta el archivo [LICENSE](LICENSE) para más detalles.

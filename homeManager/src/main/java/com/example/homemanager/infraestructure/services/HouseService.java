@@ -94,6 +94,7 @@ public class HouseService implements IHouseService {
 
         var housePersisted = houseRepository.save(houseToPersist);
 
+        // Añadir al usuario la referencia de la nueva casa
         var userToUpdate = userRepository.findById(idUserCreator).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND));
         userToUpdate.getHousesId().add(housePersisted.getId());
         userRepository.save(userToUpdate);

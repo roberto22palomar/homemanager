@@ -81,7 +81,13 @@ public class InvitationService implements IInvitationService {
                 var house = houseRepository.findById(invitationToUpdate.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
                 var userInvited = userRepository.findByUsername(invitationToUpdate.getInvitedUser());
 
+                //Añadir referencia de casa al usuario
+                userInvited.getHousesId().add(house.getId());
+                userRepository.save(userInvited);
+
+                //Añadir referencia del usuario a la casa
                 house.getMembersId().add(userInvited.getId());
+                houseRepository.save(house);
 
                 invitationToUpdate.setRevoked(true);
                 log.info("Invitation accepted and finished -> Member: {} added to house {}", userInvited.getId(), house.getId());

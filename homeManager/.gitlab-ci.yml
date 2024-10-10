@@ -10,6 +10,7 @@ cache:
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode --errors --fail-at-end"
+  RAILWAY_SERVICE_NAME: "homemanager"  # Cambia esto por el nombre de tu servicio en Railway
 
 build:
   stage: build
@@ -19,14 +20,14 @@ build:
     paths:
       - target/*.jar
 
-deploy-job:
+deploy-railway:
   stage: deploy
-  image: ruby:3.1
-  script:
-    - set -x  # Habilitar el modo de depuración
-    - echo "Deploying application..."
-    - railway login --token $RAILWAY_TOKEN  # Autentica en Railway con el token
-    - railway up  # Despliega la aplicación en Railway
-    - echo "Application successfully deployed."
+  image: ubuntu
   only:
+    - pushes
     - main
+  script:
+    - apt-get update && apt-get install -y curl  # Instala curl
+    - curl -fsSL https://railway.app/install.sh | sh  # Instala Railway CLI
+    - railway login --token $RAILWAY_TOKEN  # Autentica en Railway
+    - railway up --service=$RAILWAY_SERVICE_NAME -d  # Despliega la aplicación en Railway

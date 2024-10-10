@@ -31,14 +31,7 @@ public class BadRequestController {
                 .build();
     }
 
-    @ExceptionHandler(IdNotFoundException.class)
-    public BaseErrorResponse handleIdNotFound(IdNotFoundException exception) {
-        return ErrorResponse.builder()
-                .message(exception.getMessage())
-                .status(HttpStatus.BAD_REQUEST.name())
-                .code(HttpStatus.BAD_REQUEST.value())
-                .build();
-    }
+
 
     @ExceptionHandler(RevokedInvitationException.class)
     public BaseErrorResponse revokedInvitationException(RevokedInvitationException exception) {

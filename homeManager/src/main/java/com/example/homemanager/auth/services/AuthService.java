@@ -9,6 +9,7 @@ import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.UserRepository;
 import com.example.homemanager.utils.TokenType;
 import com.example.homemanager.utils.exceptions.UserAlreadyExists;
+import com.example.homemanager.utils.exceptions.UserCredentialsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,20 +59,27 @@ public class AuthService implements IAuthService {
 
     public TokenResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(
+        var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
 
-        var user = userRepository.findByUsername(request.getUsername());
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        if (authentication.isAuthenticated()) {
+            var user = userRepository.findByUsername(request.getUsername());
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            revokeAllUserTokens(user);
+            saveUserToken(user, jwtToken);
 
-        return new TokenResponse(jwtToken, refreshToken);
+            return new TokenResponse(jwtToken, refreshToken);
+        } else {
+
+            throw new UserCredentialsException("User credentials exception.");
+
+        }
+
 
     }
 

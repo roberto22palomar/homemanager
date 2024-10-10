@@ -147,7 +147,7 @@ class AuthControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isForbidden()); // Esperamos un error de validación
+                .andExpect(status().isBadRequest()); // Esperamos un error de validación
     }
 
     @Test
@@ -166,7 +166,7 @@ class AuthControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isBadRequest());
     }
 
     @Test

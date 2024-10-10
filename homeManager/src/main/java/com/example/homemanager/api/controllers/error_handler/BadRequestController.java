@@ -50,4 +50,13 @@ public class BadRequestController {
                 .code(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
+
+    @ExceptionHandler(UserCredentialsException.class)
+    public BaseErrorResponse userCredentialsException(UserCredentialsException exception) {
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .build();
+    }
 }

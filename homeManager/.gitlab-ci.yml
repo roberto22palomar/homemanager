@@ -1,13 +1,29 @@
+image: maven:3.8.4-jdk-17
+
 stages:
+  - build
   - deploy
 
-deploy-railway:
-  stage: deploy
-  image: ubuntu
-  only:
-    - pushes
-    - main
+cache:
+  paths:
+    - .m2/repository
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode --errors --fail-at-end"
+
+build:
+  stage: build
   script:
-    - apt-get update && apt-get install -y curl
-    - curl -fsSL https://railway.app/install.sh | sh
-    - railway up --service=$RAILWAY -d
+    - mvn $MAVEN_CLI_OPTS clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+
+deploy-dev:
+  stage: deploy
+  script:
+    - curl -sSL https://railway.app/install | bash
+    - railway login --token $RAILWAY_TOKEN  # Autenticar con Railway
+    - railway up --env development          # Desplegar a Railway en entorno de desarrollo
+  only:
+    - develop  # Desplegar solo cuando se realicen cambios en la rama develop

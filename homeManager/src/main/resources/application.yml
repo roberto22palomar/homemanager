@@ -2,7 +2,8 @@ spring:
   application:
     name: home_manager
   datasource:
-    url: jdbc:mongodb://localhost:27017/homemanager
+    url: ${MONGO_URI}
+    #jdbc:mongodb://localhost:27017/homemanager
 
 server:
   servlet:

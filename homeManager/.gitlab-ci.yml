@@ -23,8 +23,9 @@ deploy-job:
   stage: deploy
   image: ruby:3.1
   script:
+    - set -x  # Habilitar el modo de depuración
     - echo "Deploying application..."
-    - railway login --token $RAILWAY_TOKEN  # Autentica en Railway con el token que configuraste
+    - railway login --token $RAILWAY_TOKEN  # Autentica en Railway con el token
     - railway up  # Despliega la aplicación en Railway
     - echo "Application successfully deployed."
   only:

@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableMongoRepositories(basePackages = {"com.example.homemanager.domain.repositories", "com.example.homemanager.auth.repository", "com.example.homemanager.config.repositories"})
+@EnableMongoRepositories(basePackages = {"com.example.homemanager.domain.repositories", "com.example.homemanager.auth.repository", "com.example.homemanager.config.configurations.repositories"})
 public class HomeManagerApplication {
 
     public static void main(String[] args) {

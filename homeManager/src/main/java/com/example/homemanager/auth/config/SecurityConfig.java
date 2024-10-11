@@ -92,6 +92,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("https://homemanager-development.up.railway.app");
+        configuration.addExposedHeader("Authorization"); // si estás usando JWT
         configuration.addAllowedOrigin("*"); // Permitir todas las origines (ajustar para producción)
         configuration.addAllowedHeader("*"); // Permitir todos los headers
         configuration.addAllowedMethod("*"); // Permitir todos los métodos (GET, POST, etc.)

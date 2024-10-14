@@ -9,17 +9,13 @@
 1. [Características](#características)
 2. [Tecnologías Utilizadas](#tecnologías-utilizadas)
 3. [Requisitos Previos](#requisitos-previos)
-4. [Configuración del Proyecto](#configuración-del-proyecto)
-5. [Estructura del Proyecto](#estructura-del-proyecto)
-6. [Autenticación y Seguridad](#autenticación-y-seguridad)
-7. [Pruebas](#pruebas)
-8. [Swagger](#swagger)
-9. [Contribuciones](#contribuciones)
-10. [Licencia](#licencia)
+4. [Estructura del Proyecto](#estructura-del-proyecto)
+5. [Autenticación y Seguridad](#autenticación-y-seguridad)
+6. [Pruebas](#pruebas)
+7. [Swagger](#swagger)
 
 ## **Características**
 - Autenticación basada en JWT.
-- Gestión de roles de usuarios (Admin, User).
 - CRUD de usuarios, tareas, invitaciones, lista de la compra y casas.
 - Asignación de tareas y compras a los miembros de una casa.
 - Token de refresco para manejo de sesiones seguras.
@@ -36,46 +32,7 @@
 Antes de configurar y ejecutar el proyecto, asegúrate de tener instalado lo siguiente:
 
 - **Java 17 o superior**: [Descargar Java](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html)
-- **Maven**: [Descargar Maven](https://maven.apache.org/download.cgi)
 - **MongoDB**: [Descargar MongoDB](https://www.mongodb.com/try/download/community)
-
-## **Configuración del Proyecto**
-
-### **Clonar el Repositorio**
-
-\`\`\`bash
-git clone https://github.com/usuario/homemanager.git
-cd homemanager
-\`\`\`
-
-### **Configuración del Entorno**
-
-1. Configura las variables de entorno para la conexión con MongoDB y otros parámetros en un archivo \`application.properties\` o \`application.yml\` dentro de la carpeta \`src/main/resources/\`.
-
-**application.properties**:
-
-\`\`\`properties
-# Configuración de MongoDB
-spring.data.mongodb.uri=mongodb://localhost:27017/homemanager
-
-# Configuración de JWT
-jwt.secret-key=tu-secreto
-jwt.expiration=3600000
-jwt.refresh-expiration=86400000
-\`\`\`
-
-2. Asegúrate de tener MongoDB corriendo en el puerto correcto (por defecto \`27017\`).
-
-### **Compilar y Ejecutar**
-
-Compila y ejecuta la aplicación localmente:
-
-\`\`\`bash
-mvn clean install
-mvn spring-boot:run
-\`\`\`
-
-La aplicación estará disponible en: \`http://localhost:8080\`
 
 ## **Estructura del Proyecto**
 
@@ -112,21 +69,9 @@ Este proyecto utiliza **JWT (JSON Web Token)** para autenticar y autorizar usuar
 1. **Registro (\`/auth/register\`)**: Un usuario puede registrarse con un nombre de usuario, contraseña y correo electrónico.
 2. **Login (\`/auth/login\`)**: Después de la autenticación, se emite un JWT que debe incluirse en cada solicitud en el header \`Authorization: Bearer <token>\`.
 
-### **Protección de Rutas**
-Las rutas están protegidas según el rol del usuario:
-
-- **Usuarios normales** pueden acceder a las rutas bajo \`/dashboard/**\`.
-- **Admin** tiene acceso a rutas específicas como \`/admin/**\`.
-
 ## **Pruebas**
 
 Este proyecto incluye pruebas unitarias y de integración usando **JUnit** y **Mockito**.
-
-### **Ejecutar Pruebas**
-
-\`\`\`bash
-mvn test
-\`\`\`
 
 ### **Cobertura de Pruebas**
 Explicar qué partes de la aplicación están cubiertas por pruebas, como el servicio de autenticación, controladores, etc.
@@ -141,14 +86,3 @@ http://localhost:8080/swagger-ui/index.html
 
 Puedes usar Swagger para probar los endpoints directamente desde el navegador.
 
-## **Contribuciones**
-Si deseas contribuir al proyecto:
-
-1. Crea un fork del repositorio.
-2. Crea una nueva rama con tu feature o fix (\`git checkout -b feature/nueva-feature\`).
-3. Haz commit de tus cambios (\`git commit -m 'Agrega nueva feature'\`).
-4. Haz push a la rama (\`git push origin feature/nueva-feature\`).
-5. Crea un Pull Request.
-
-## **Licencia**
-Este proyecto está licenciado bajo la Licencia MIT - consulta el archivo [LICENSE](LICENSE) para más detalles.

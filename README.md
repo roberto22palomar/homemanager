@@ -5,7 +5,7 @@
 
 ## **Descripción del Proyecto**
 
-> **HomeManager** es una aplicación para gestionar las tareas, compras y más en una casa compartida. Proporciona un sistema de autenticación con JWT para asegurar las peticiones, y permite a los usuarios gestionar casas, tareas y listas de compras de manera colaborativa, también se dispone de un sistema de puntos para obtener recompensas dentro de la misma casa.
+> **HomeManager** es una aplicación para gestionar las tareas, compras y más, en una casa compartida. Proporciona un sistema de autenticación con JWT para asegurar las peticiones, y permite a los usuarios gestionar casas, tareas y listas de compras de manera colaborativa, también se dispone de un sistema de puntos para obtener recompensas dentro de la misma casa.
 
 ## **Tabla de Contenidos**
 1. [Características](#características)

@@ -3,7 +3,7 @@ spring:
     name: home_manager
   data:
     mongodb:
-      uri: {MONGO_URI}
+      uri: ${MONGO_URI}
       #RUTA ACTUAL PARA DESPLEGAR EN RAILWAY
       #SI SE QUIERE LANZAR EN LOCAL, INDICAR RUTA
 
@@ -14,10 +14,10 @@ server:
 application:
   security:
     jwt:
-      secret-key: {SECRET_KEY}
-      expiration: {ACCESS_TOKEN_EXP}
+      secret-key: ${SECRET_KEY}
+      expiration: ${ACCESS_TOKEN_EXP}
       refresh-token:
-        expiration: {REFRESH_TOKEN_EXP}
+        expiration: ${REFRESH_TOKEN_EXP}
 
 springdoc:
   api-docs:

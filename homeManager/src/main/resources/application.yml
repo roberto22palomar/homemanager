@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: home_manager
+  data:
+    mongodb:
+      uri: {MONGO_URI}
+      #RUTA ACTUAL PARA DESPLEGAR EN RAILWAY
+      #SI SE QUIERE LANZAR EN LOCAL, INDICAR RUTA
+
+server:
+  servlet:
+    context-path: /homemanager
+
+application:
+  security:
+    jwt:
+      secret-key: {SECRET_KEY}
+      expiration: {ACCESS_TOKEN_EXP}
+      refresh-token:
+        expiration: {REFRESH_TOKEN_EXP}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config:
+      init:
+        enableAuthentication: true
+

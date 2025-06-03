@@ -1,0 +1,34 @@
+services:
+  # ===== Servicio MongoDB =====
+  mongo:
+    image: mongo:5.0
+    container_name: homemanager-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # ===== Servicio HomeManager (Spring Boot) =====
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: homemanager-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # MongoDB URI de conexión
+      - MONGO_URI
+      # Clave secreta para JWT (cámbiala antes a algo seguro)
+      - SECRET_KEY
+      # Expiración en milisegundos (ej. 1h = 3600000 ms)
+      - ACCESS_TOKEN_EXP
+      # Expiración refresh token (ej. 24h = 86400000 ms)
+      - REFRESH_TOKEN_EXP
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:

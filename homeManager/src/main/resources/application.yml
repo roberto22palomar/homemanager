@@ -4,8 +4,6 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_URI}
-      #RUTA ACTUAL PARA DESPLEGAR EN RAILWAY
-      #SI SE QUIERE LANZAR EN LOCAL, INDICAR RUTA
 
 server:
   servlet:

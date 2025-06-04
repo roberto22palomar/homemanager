@@ -41,6 +41,8 @@ public class ShoppingItemService implements IShoppingItemService {
     @Override
     public ShoppingItemResponse create(ShoppingItemRequest request) {
 
+        HouseDocument house = houseRepository.findById(request.getHouseId())
+                .orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), request.getHouseId()));
 
         ShoppingItemDocument shoppingItemToPersist = ShoppingItemDocument.builder()
                 .houseId(request.getHouseId())
@@ -50,9 +52,6 @@ public class ShoppingItemService implements IShoppingItemService {
                 .build();
 
         var shoppingItemPersisted = shoppingItemRepository.save(shoppingItemToPersist);
-
-        var house = houseRepository.findById(shoppingItemPersisted.getHouseId())
-                .orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),shoppingItemPersisted.getHouseId()));
 
         house.getShoppingItemsId().add(shoppingItemPersisted.getId());
 

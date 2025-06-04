@@ -95,7 +95,7 @@ public class HouseService implements IHouseService {
         var housePersisted = houseRepository.save(houseToPersist);
 
         // Añadir al usuario la referencia de la nueva casa
-        var userToUpdate = userRepository.findById(idUserCreator).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND));
+        var userToUpdate = userRepository.findById(idUserCreator).orElseThrow(() -> new IdNotFoundException(UserDocument.class.getSimpleName(),idUserCreator));
         userToUpdate.getHousesId().add(housePersisted.getId());
         userRepository.save(userToUpdate);
 
@@ -106,7 +106,7 @@ public class HouseService implements IHouseService {
 
     public Set<TaskResponse> getHouseTasks(String id) {
 
-        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
+        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), id));
 
         List<TaskDocument> tasks = taskRepository.findAllById(casa.getTasksId());
 
@@ -121,7 +121,7 @@ public class HouseService implements IHouseService {
 
     public Set<ShoppingItemResponse> getHouseShoppingItems(String id) {
 
-        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
+        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),id));
 
         return shoppingItemRepository.findAllById(casa.getShoppingItemsId())
                 .stream()
@@ -132,7 +132,7 @@ public class HouseService implements IHouseService {
     @Override
     public HouseResponse read(String id) {
 
-        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
+        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),id));
 
         return entityToResponse(casa);
     }
@@ -158,7 +158,7 @@ public class HouseService implements IHouseService {
     private TaskResponse entityTaskToResponse(TaskDocument entity) {
         var response = new TaskResponse();
         BeanUtils.copyProperties(entity, response);
-        response.setAssignedMember(entityUserToMemberResponse(userRepository.findById(entity.getAssignedUserId()).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND))));
+        response.setAssignedMember(entityUserToMemberResponse(userRepository.findById(entity.getAssignedUserId()).orElseThrow(() -> new IdNotFoundException(UserDocument.class.getSimpleName(), entity.getAssignedUserId()))));
         return response;
 
     }

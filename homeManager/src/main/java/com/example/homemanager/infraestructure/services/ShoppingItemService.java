@@ -5,6 +5,7 @@ import com.example.homemanager.api.models.responses.ShoppingItemResponse;
 import com.example.homemanager.auth.aspects.CheckHouseAccess;
 import com.example.homemanager.config.configurations.models.ShoppingItemCleanupConfig;
 import com.example.homemanager.config.configurations.services.ConfigurationService;
+import com.example.homemanager.domain.documents.HouseDocument;
 import com.example.homemanager.domain.documents.ShoppingItemDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
 import com.example.homemanager.domain.repositories.ShoppingItemRepository;
@@ -50,7 +51,8 @@ public class ShoppingItemService implements IShoppingItemService {
 
         var shoppingItemPersisted = shoppingItemRepository.save(shoppingItemToPersist);
 
-        var house = houseRepository.findById(shoppingItemPersisted.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
+        var house = houseRepository.findById(shoppingItemPersisted.getHouseId())
+                .orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),shoppingItemPersisted.getHouseId()));
 
         house.getShoppingItemsId().add(shoppingItemPersisted.getId());
 

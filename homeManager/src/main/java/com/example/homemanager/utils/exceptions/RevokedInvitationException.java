@@ -1,10 +1,12 @@
 package com.example.homemanager.utils.exceptions;
 
-public class RevokedInvitationException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class RevokedInvitationException extends ApiException {
 
 
-    public RevokedInvitationException(String message) {
-        super(message);
+    public RevokedInvitationException(String idInvitation) {
+        super(HttpStatus.FORBIDDEN, "The invitation: " + idInvitation + " is revoked.");
     }
 
 }

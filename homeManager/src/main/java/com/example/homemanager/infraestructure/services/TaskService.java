@@ -4,6 +4,7 @@ import com.example.homemanager.api.models.request.TaskRequest;
 import com.example.homemanager.api.models.responses.MemberResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
 import com.example.homemanager.auth.aspects.CheckHouseAccess;
+import com.example.homemanager.domain.documents.HouseDocument;
 import com.example.homemanager.domain.documents.TaskDocument;
 import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
@@ -31,10 +32,6 @@ public class TaskService implements ITaskService {
     private final HouseRepository houseRepository;
     private final UserRepository userRepository;
 
-    private static final String HOUSE_NOT_FOUND = "House not found with that ID.";
-    private static final String TASK_NOT_FOUND = "Task not found with that ID.";
-    private static final String USER_NOT_FOUND = "User not found with that ID.";
-
     @Override
     public TaskResponse create(TaskRequest request) {
 
@@ -54,7 +51,7 @@ public class TaskService implements ITaskService {
 
         var taskPersisted = taskRepository.save(taskToPersist);
 
-        var casa = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
+        var casa = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), request.getHouseId()));
         casa.getTasksId().add(taskPersisted.getId());
         houseRepository.save(casa);
 
@@ -66,10 +63,10 @@ public class TaskService implements ITaskService {
     public TaskResponse updateStatus(String id, TaskStatus status) {
 
         var taskToUpdate = taskRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException(TASK_NOT_FOUND));
+                .orElseThrow(() -> new IdNotFoundException(TaskDocument.class.getSimpleName(), id));
 
         var house = houseRepository.findById(taskToUpdate.getHouseId())
-                .orElseThrow(() -> new IdNotFoundException(HOUSE_NOT_FOUND));
+                .orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), taskToUpdate.getHouseId()));
 
         if (status.equals(TaskStatus.COMPLETED)) {
 
@@ -110,8 +107,8 @@ public class TaskService implements ITaskService {
     @Override
     public void delete(String id) {
 
-        var task = taskRepository.findById(id).orElseThrow(()-> new IdNotFoundException(TASK_NOT_FOUND));
-        var house = houseRepository.findById(task.getHouseId()).orElseThrow(()-> new IdNotFoundException(HOUSE_NOT_FOUND));
+        var task = taskRepository.findById(id).orElseThrow(() -> new IdNotFoundException(TaskDocument.class.getSimpleName(), id));
+        var house = houseRepository.findById(task.getHouseId()).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), task.getHouseId()));
 
         //Quitar referencia de la tarea en la casa
         house.getTasksId().remove(task.getId());
@@ -126,7 +123,8 @@ public class TaskService implements ITaskService {
     private TaskResponse entityToResponse(TaskDocument entity) {
         var response = new TaskResponse();
         BeanUtils.copyProperties(entity, response);
-        response.setAssignedMember(entityUserToMemberResponse(userRepository.findById(entity.getAssignedUserId()).orElseThrow(() -> new IdNotFoundException(USER_NOT_FOUND))));
+        response.setAssignedMember(entityUserToMemberResponse(userRepository.findById(entity.getAssignedUserId())
+                .orElseThrow(() -> new IdNotFoundException(UserDocument.class.getSimpleName(), entity.getAssignedUserId()))));
         return response;
 
     }

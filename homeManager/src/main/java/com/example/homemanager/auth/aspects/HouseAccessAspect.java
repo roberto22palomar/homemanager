@@ -1,6 +1,7 @@
 package com.example.homemanager.auth.aspects;
 
 
+import com.example.homemanager.domain.documents.HouseDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
 import com.example.homemanager.domain.repositories.UserRepository;
 import com.example.homemanager.utils.exceptions.IdNotFoundException;
@@ -29,10 +30,10 @@ public class HouseAccessAspect {
         var userId = userRepository.findByUsername(username).getId();
 
         var house = houseRepository.findById(houseId)
-                .orElseThrow(() -> new IdNotFoundException("House not found."));
+                .orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), houseId));
 
         if (!house.getMembersId().contains(userId)) {
-            throw new UserNotMemberOfHouse("Access Denied: User isn't member of this house.");
+            throw new UserNotMemberOfHouse(userId, houseId);
         }
     }
 }

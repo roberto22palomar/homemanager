@@ -1,11 +1,9 @@
 package com.example.homemanager.utils.exceptions;
 
-public class UserCredentialsException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-
-    public UserCredentialsException(String message) {
-        super(message);
+public class UserCredentialsException extends ApiException {
+    public UserCredentialsException() {
+        super(HttpStatus.UNAUTHORIZED, "Usuario o contraseña incorrectos.");
     }
-
 }
-

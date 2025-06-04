@@ -1,10 +1,12 @@
 package com.example.homemanager.utils.exceptions;
 
-public class UserNotMemberOfHouse extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class UserNotMemberOfHouse extends ApiException {
 
 
-    public UserNotMemberOfHouse(String message) {
-        super(message);
+    public UserNotMemberOfHouse(String user, String house) {
+        super(HttpStatus.UNAUTHORIZED, "The user" + user + "isn't member of the house: " + house);
     }
 
 }

@@ -8,7 +8,7 @@ import com.example.homemanager.auth.repository.TokenRepository;
 import com.example.homemanager.domain.documents.UserDocument;
 import com.example.homemanager.domain.repositories.UserRepository;
 import com.example.homemanager.utils.TokenType;
-import com.example.homemanager.utils.exceptions.UserAlreadyExists;
+import com.example.homemanager.utils.exceptions.UserAlreadyExistsException;
 import com.example.homemanager.utils.exceptions.UserCredentialsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class AuthService implements IAuthService {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             log.info("Register - Username already in use: {}", request.getUsername());
-            throw new UserAlreadyExists("Username already in use.");
+            throw new UserAlreadyExistsException(request.getUsername());
         } else {
             UserDocument userToPersist = UserDocument.builder()
                     .username(request.getUsername())
@@ -76,11 +76,9 @@ public class AuthService implements IAuthService {
             return new TokenResponse(jwtToken, refreshToken);
         } else {
 
-            throw new UserCredentialsException("User credentials exception.");
+            throw new UserCredentialsException();
 
         }
-
-
     }
 
     public void revokeAllUserTokens(UserDocument user) {

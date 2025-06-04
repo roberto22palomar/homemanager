@@ -2,6 +2,7 @@ package com.example.homemanager.infraestructure.services;
 
 import com.example.homemanager.api.models.request.InvitationRequest;
 import com.example.homemanager.api.models.responses.InvitationResponse;
+import com.example.homemanager.domain.documents.HouseDocument;
 import com.example.homemanager.domain.documents.InvitationDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
 import com.example.homemanager.domain.repositories.InvitationRepository;
@@ -10,7 +11,7 @@ import com.example.homemanager.infraestructure.abstract_services.IInvitationServ
 import com.example.homemanager.utils.InvitationStatus;
 import com.example.homemanager.utils.exceptions.IdNotFoundException;
 import com.example.homemanager.utils.exceptions.RevokedInvitationException;
-import com.example.homemanager.utils.exceptions.UserAlreadyMember;
+import com.example.homemanager.utils.exceptions.UserAlreadyMemberExepction;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -36,7 +37,7 @@ public class InvitationService implements IInvitationService {
     @Override
     public InvitationResponse create(InvitationRequest request) {
 
-        var house = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
+        var house = houseRepository.findById(request.getHouseId()).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),request.getHouseId()));
         var userInvited = userRepository.findByUsername(request.getInvitedUser());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,7 +59,7 @@ public class InvitationService implements IInvitationService {
             return entityToResponse(invitationPersisted);
         } else {
             log.info("User {} is already member of house {}", userInvited.getUsername(), request.getHouseId());
-            throw new UserAlreadyMember("The user is already a member of that house.");
+            throw new UserAlreadyMemberExepction("The user is already a member of that house.");
         }
 
 
@@ -71,14 +72,14 @@ public class InvitationService implements IInvitationService {
 
     public InvitationResponse updateInvitationStatus(String id, InvitationStatus status) {
 
-        var invitationToUpdate = invitationRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Invitation not found."));
+        var invitationToUpdate = invitationRepository.findById(id).orElseThrow(() -> new IdNotFoundException(InvitationDocument.class.getSimpleName(), id));
         invitationToUpdate.setStatus(status);
 
         if (!invitationToUpdate.isRevoked()) {
 
             if (status.equals(InvitationStatus.ACCEPTED)) {
 
-                var house = houseRepository.findById(invitationToUpdate.getHouseId()).orElseThrow(() -> new IdNotFoundException("House not found."));
+                var house = houseRepository.findById(invitationToUpdate.getHouseId()).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), invitationToUpdate.getHouseId()));
                 var userInvited = userRepository.findByUsername(invitationToUpdate.getInvitedUser());
 
                 //Añadir referencia de casa al usuario

@@ -1,11 +1,13 @@
 package com.example.homemanager.utils.exceptions;
 
-public class ConfigurationReadingException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
+/**
+ * Se lanza cuando ocurre un problema al leer o cargar la configuración.
+ */
+public class ConfigurationReadingException extends ApiException {
 
-    public ConfigurationReadingException(String message) {
-        super(message);
+    public ConfigurationReadingException(String configurationName) {
+        super(HttpStatus.BAD_REQUEST, "The configuration: "+configurationName+ "couldn't be read");
     }
-
 }
-

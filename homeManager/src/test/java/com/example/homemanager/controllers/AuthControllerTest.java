@@ -8,7 +8,7 @@ import com.example.homemanager.auth.repository.TokenRepository;
 import com.example.homemanager.auth.services.IAuthService;
 import com.example.homemanager.auth.services.JwtService;
 import com.example.homemanager.domain.repositories.UserRepository;
-import com.example.homemanager.utils.exceptions.UserAlreadyExists;
+import com.example.homemanager.utils.exceptions.UserAlreadyExistsException;
 import com.example.homemanager.utils.exceptions.UserCredentialsException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,7 +87,7 @@ class AuthControllerTest {
 
         // Mocking the service to return the mock token response
         Mockito.when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new UserAlreadyExists("User already exist."));
+                .thenThrow(new UserAlreadyExistsException(registerRequest.getUsername()));
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
@@ -105,7 +105,7 @@ class AuthControllerTest {
 
         // Mocking the service to return the mock token response
         Mockito.when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new UserCredentialsException("Bad Request."));
+                .thenThrow(new UserCredentialsException());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
@@ -160,7 +160,7 @@ class AuthControllerTest {
 
         // Mocking the service to throw UserCredentialsException
         Mockito.when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new UserCredentialsException("Invalid credentials."));
+                .thenThrow(new UserCredentialsException());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
@@ -193,7 +193,7 @@ class AuthControllerTest {
 
         // Mocking the service to throw an exception for invalid token
         Mockito.when(authService.refresh(authHeader))
-                .thenThrow(new UserCredentialsException("Invalid token."));
+                .thenThrow(new UserCredentialsException());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/refresh")

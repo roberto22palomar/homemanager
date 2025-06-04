@@ -1,11 +1,9 @@
 package com.example.homemanager.utils.exceptions;
 
-public class IdNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-
-    public IdNotFoundException(String message) {
-        super(message);
+public class IdNotFoundException extends ApiException {
+    public IdNotFoundException(String entityName, String id) {
+        super(HttpStatus.NOT_FOUND, entityName + " not found with id: " + id);
     }
-
 }
-

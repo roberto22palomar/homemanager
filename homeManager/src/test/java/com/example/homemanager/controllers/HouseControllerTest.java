@@ -7,6 +7,7 @@ import com.example.homemanager.api.models.responses.MemberResponse;
 import com.example.homemanager.api.models.responses.ShoppingItemResponse;
 import com.example.homemanager.api.models.responses.TaskResponse;
 import com.example.homemanager.auth.config.JwtAuthenticationFilter;
+import com.example.homemanager.domain.documents.HouseDocument;
 import com.example.homemanager.domain.repositories.HouseRepository;
 import com.example.homemanager.infraestructure.abstract_services.IHouseService;
 import com.example.homemanager.utils.exceptions.IdNotFoundException;
@@ -134,7 +135,7 @@ class HouseControllerTest {
         // Arrange
         String houseId = "nonExistentId";
 
-        Mockito.when(houseService.read(houseId)).thenThrow(new IdNotFoundException("House not found."));
+        Mockito.when(houseService.read(houseId)).thenThrow(new IdNotFoundException(HouseDocument.class.getSimpleName(),houseId));
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/house/" + houseId))
@@ -169,7 +170,7 @@ class HouseControllerTest {
     void testGetHouseTasks_NotFound() throws Exception {
         // Arrange
         String houseId = "nonExistentId";
-        Mockito.when(houseService.getHouseTasks(houseId)).thenThrow(new IdNotFoundException("House not found."));
+        Mockito.when(houseService.getHouseTasks(houseId)).thenThrow(new IdNotFoundException(HouseDocument.class.getSimpleName(),houseId));
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/house/getTasks/" + houseId))
@@ -202,7 +203,7 @@ class HouseControllerTest {
     void testGetHouseShoppingItems_NotFound() throws Exception {
         // Arrange
         String houseId = "nonExistentId";
-        Mockito.when(houseService.getHouseShoppingItems(houseId)).thenThrow(new IdNotFoundException("House not found."));
+        Mockito.when(houseService.getHouseShoppingItems(houseId)).thenThrow(new IdNotFoundException(HouseDocument.class.getSimpleName(),houseId));
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/house/getShoppingItems/" + houseId))
@@ -223,7 +224,7 @@ class HouseControllerTest {
     void testDeleteHouse_NotFound() throws Exception {
         // Arrange
         String houseId = "nonExistentId";
-        Mockito.doThrow(new IdNotFoundException("House not found.")).when(houseService).delete(houseId);
+        Mockito.doThrow(new IdNotFoundException(HouseDocument.class.getSimpleName(),houseId)).when(houseService).delete(houseId);
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/house/" + houseId))

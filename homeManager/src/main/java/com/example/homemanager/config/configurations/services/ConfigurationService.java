@@ -25,7 +25,7 @@ public class ConfigurationService {
                 T configValue = objectMapper.readValue(jsonValue, valueType);
                 return Optional.of(configValue);
             } catch (JsonProcessingException e) {
-                throw new ConfigurationReadingException("Error deserialization configuration");
+                throw new ConfigurationReadingException(key);
             }
         }
         return Optional.empty();

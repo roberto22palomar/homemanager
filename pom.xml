@@ -14,7 +14,7 @@
 
 	<!-- Project Coordinates -->
 	<groupId>com.example</groupId>
-	<artifactId>homemanager</artifactId>
+	<artifactId>homemanager-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>home_manager</name>
 	<description>Proyecto para la gestión del hogar</description>

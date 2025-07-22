@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.getServletPath(),
                 request.getHeader(HttpHeaders.AUTHORIZATION));
 
-        if (request.getServletPath().contains("/homemanager/auth")) {
+        if (request.getServletPath().contains("/auth")) {
             filterChain.doFilter(request, response);
             return;
         }

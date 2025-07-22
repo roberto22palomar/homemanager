@@ -1,5 +1,6 @@
 package com.example.homemanager;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -11,6 +12,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class HomeManagerApplication {
 
     public static void main(String[] args) {
+
+        //Cargador de las variables del .env
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        dotenv.entries().forEach(entry ->
+                System.setProperty(entry.getKey(), entry.getValue())
+        );
+
         SpringApplication.run(HomeManagerApplication.class, args);
     }
 

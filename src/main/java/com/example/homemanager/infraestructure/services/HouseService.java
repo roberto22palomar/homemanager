@@ -95,7 +95,7 @@ public class HouseService implements IHouseService {
         var housePersisted = houseRepository.save(houseToPersist);
 
         // Añadir al usuario la referencia de la nueva casa
-        var userToUpdate = userRepository.findById(idUserCreator).orElseThrow(() -> new IdNotFoundException(UserDocument.class.getSimpleName(),idUserCreator));
+        var userToUpdate = userRepository.findById(idUserCreator).orElseThrow(() -> new IdNotFoundException(UserDocument.class.getSimpleName(), idUserCreator));
         userToUpdate.getHousesId().add(housePersisted.getId());
         userRepository.save(userToUpdate);
 
@@ -103,6 +103,22 @@ public class HouseService implements IHouseService {
 
         return entityToResponse(housePersisted);
     }
+
+    @Override
+    public List<HouseResponse> findUserHouses(String userName) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String user = authentication.getName();
+
+        var idUser = userRepository.findByUsername(user).getId();
+
+        return houseRepository.findByMembersId(idUser)
+                .stream()
+                .map(this::entityToResponse)
+                .collect(Collectors.toList());
+
+    }
+
 
     public Set<TaskResponse> getHouseTasks(String id) {
 
@@ -121,7 +137,7 @@ public class HouseService implements IHouseService {
 
     public Set<ShoppingItemResponse> getHouseShoppingItems(String id) {
 
-        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),id));
+        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), id));
 
         return shoppingItemRepository.findAllById(casa.getShoppingItemsId())
                 .stream()
@@ -132,7 +148,7 @@ public class HouseService implements IHouseService {
     @Override
     public HouseResponse read(String id) {
 
-        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(),id));
+        var casa = houseRepository.findById(id).orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), id));
 
         return entityToResponse(casa);
     }

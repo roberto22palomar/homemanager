@@ -11,8 +11,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -49,6 +52,16 @@ public class HouseController {
 
         return ResponseEntity.ok(houseService.getHouseShoppingItems(id));
     }
+
+    @Operation(summary = "Consulta las casas a la que pertenece el usuario.", description = "Retorna la lista de casas a las que pertenece el usuario.")
+    @GetMapping
+    public ResponseEntity<List<HouseResponse>> findUserHouses(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String username = userDetails.getUsername();
+        return ResponseEntity.ok(houseService.findUserHouses(username));
+    }
+
 
     @Operation(summary = "Consulta información de la casa.", description = "Retorna información de la casa consultada.")
     @GetMapping("/{id}")

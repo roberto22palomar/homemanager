@@ -34,4 +34,10 @@ public class AuthController {
         return authService.refresh(authHeader);
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken() {
+        return ResponseEntity.ok().build();//Solo se llega a esta petición si el token es válido.
+    }
+
+
 }

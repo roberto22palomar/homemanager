@@ -34,7 +34,9 @@ public class SecurityConfig {
     private final TokenRepository tokenRepository;
 
     private static final String[] PUBLIC_URLS = {
-            "/auth/**",
+            "/auth/login",
+            "/auth/register",
+            "/auth/refresh",
             "/login.html",
             "/register.html",
             "/swagger-ui/**",

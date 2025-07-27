@@ -21,15 +21,15 @@ public class HouseAccessAspect {
     private final HouseRepository houseRepository;
     private final UserRepository userRepository;
 
-    @Before("execution(* com.example.homemanager.infraestructure.services.HouseService.*(..)) && args(houseId,..)")
+    @Before("execution(* com.example.homemanager.infraestructure.services.HouseService.*(..)) && args(houseId,..) && !execution(* findUserHouses(..))")
     public void checkHouseAccess(String houseId) {
+        if (houseId == null) return; // seguridad extra por si acaso
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
+        String userId = userRepository.findByUsername(username).getId();
 
-        var userId = userRepository.findByUsername(username).getId();
-
-        var house = houseRepository.findById(houseId)
+        HouseDocument house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new IdNotFoundException(HouseDocument.class.getSimpleName(), houseId));
 
         if (!house.getMembersId().contains(userId)) {

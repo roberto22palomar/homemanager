@@ -50,6 +50,12 @@ public class HouseService implements IHouseService {
         var response = new HouseResponse();
         BeanUtils.copyProperties(entity, response);
 
+        var creator = userRepository
+                .findById(entity.getCreatorId())
+                .orElseThrow(() -> new IdNotFoundException(UserDocument.class.getSimpleName(), entity.getCreatorId()));
+
+        response.setCreatorUsername(creator.getUsername());
+
         var users = new HashSet<>(userRepository.findAllById(entity.getMembersId()));
         Set<MemberResponse> members = new HashSet<>();
         users.forEach(user -> members.add(entityUserToMemberResponse(user)));
@@ -115,7 +121,7 @@ public class HouseService implements IHouseService {
         return houseRepository.findByMembersId(idUser)
                 .stream()
                 .map(this::entityToResponse)
-                .collect(Collectors.toList());
+                .toList();
 
     }
 

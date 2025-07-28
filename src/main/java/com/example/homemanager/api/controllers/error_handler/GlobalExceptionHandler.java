@@ -1,26 +1,28 @@
 package com.example.homemanager.api.controllers.error_handler;
 
+import com.example.homemanager.utils.exceptions.ApiException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-
-import com.example.homemanager.utils.exceptions.ApiException;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1) Manejo de errores de validación (@Valid) → 400 Bad Request
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(
             MethodArgumentNotValidException ex, WebRequest request) {
+
+        log.warn("Validación fallida: {}", ex.getMessage());
 
         Map<String, String> fieldErrors = new HashMap<>();
         for (FieldError err : ex.getBindingResult().getFieldErrors()) {
@@ -40,10 +42,9 @@ public class GlobalExceptionHandler {
                 .body(body);
     }
 
-    // 2) Manejador único para todas las ApiException → usa ex.getStatus()
     @ExceptionHandler(ApiException.class)
-    public ResponseEntity<Map<String, Object>> handleApiException(
-            ApiException ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleApiException(ApiException ex, WebRequest request) {
+        log.warn("ApiException lanzada: {} [{}]", ex.getMessage(), ex.getStatus());
 
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", Instant.now().toString());
@@ -55,10 +56,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(body);
     }
 
-    // 3) Catch‐all para cualquier excepción no prevista → 500 Internal Server Error
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleAllUncaughtExceptions(
-            Exception ex, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleAllUncaughtExceptions(Exception ex, WebRequest request) {
+        log.error("Error inesperado capturado en handler global", ex); // <-- esto siempre debe imprimirse
 
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", Instant.now().toString());
@@ -67,8 +67,7 @@ public class GlobalExceptionHandler {
         body.put("message", "Ha ocurrido un error inesperado");
         body.put("path", request.getDescription(false).replace("uri=", ""));
 
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(body);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
+
 }

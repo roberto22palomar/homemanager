@@ -35,6 +35,8 @@ public class AuthService implements IAuthService {
 
     public TokenResponse register(RegisterRequest request) {
 
+        log.info("Register attempt | username='{}'", request.getUsername());
+
         if (userRepository.existsByUsername(request.getUsername())) {
             log.info("Register - Username already in use: {}", request.getUsername());
             throw new UserAlreadyExistsException(request.getUsername());
@@ -51,13 +53,15 @@ public class AuthService implements IAuthService {
             var refreshToken = jwtService.generateRefreshToken(userPersisted);
             saveUserToken(userPersisted, jwtToken);
 
-            log.info("User: {} created", userPersisted.getUsername());
+            log.info("Register successful | username='{}'", userPersisted.getUsername());
 
             return new TokenResponse(jwtToken, refreshToken);
         }
     }
 
     public TokenResponse login(LoginRequest request) {
+
+        log.info("Login attempt | username='{}'", request.getUsername());
 
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -66,20 +70,29 @@ public class AuthService implements IAuthService {
                 )
         );
 
-        if (authentication.isAuthenticated()) {
-            var user = userRepository.findByUsername(request.getUsername());
-            var jwtToken = jwtService.generateToken(user);
-            var refreshToken = jwtService.generateRefreshToken(user);
-            revokeAllUserTokens(user);
-            saveUserToken(user, jwtToken);
-
-            return new TokenResponse(jwtToken, refreshToken);
-        } else {
-
+        if (!authentication.isAuthenticated()) {
+            log.warn("Login failed (not authenticated) | username='{}'", request.getUsername());
+            System.out.println(">>> LANZANDO UserCredentialsException");
             throw new UserCredentialsException();
-
         }
+
+        var user = userRepository.findByUsername(request.getUsername());
+
+        if (user == null) {
+            log.warn("Login failed (user not found after authentication) | username='{}'", request.getUsername());
+            throw new UserCredentialsException();
+        }
+
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
+        log.info("Login successful | username='{}'", user.getUsername());
+
+        return new TokenResponse(jwtToken, refreshToken);
     }
+
 
     public void revokeAllUserTokens(UserDocument user) {
         List<TokenDocument> validUserTokens = tokenRepository.findAllValidTokensByUsername(user.getUsername());
@@ -88,8 +101,10 @@ public class AuthService implements IAuthService {
                 token.setExpired(true);
                 token.setRevoked(true);
             }
-            log.info("Old tokens revoked for user: {}", user.getUsername());
+            log.info("Tokens revoked | username='{}'", user.getUsername());
             tokenRepository.saveAll(validUserTokens);
+        } else {
+            log.info("No Tokens to revoke | username='{}'", user.getUsername());
         }
     }
 

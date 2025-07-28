@@ -40,7 +40,8 @@ public class SecurityConfig {
             "/login.html",
             "/register.html",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/status/health"
     };
 
     @Bean

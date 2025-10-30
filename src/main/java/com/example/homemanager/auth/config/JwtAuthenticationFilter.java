@@ -40,11 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        log.info("JWT FILTER → requestURI = {}, servletPath = {}, Authorization = {}",
-                request.getRequestURI(),
-                request.getServletPath(),
-                request.getHeader(HttpHeaders.AUTHORIZATION));
-
         if (request.getServletPath().contains("/login") || request.getServletPath().contains("/register") || request.getServletPath().contains("/status/health")) {
             filterChain.doFilter(request, response);
             return;

@@ -6,7 +6,7 @@ public class UserNotMemberOfHouse extends ApiException {
 
 
     public UserNotMemberOfHouse(String user, String house) {
-        super(HttpStatus.UNAUTHORIZED, "The user" + user + "isn't member of the house: " + house);
+        super(HttpStatus.FORBIDDEN, "The user" + user + "isn't member of the house: " + house);
     }
 
 }
